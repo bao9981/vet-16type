@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;html lang="zh-Hant"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="utf-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width,initial-scale=1" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;獸醫 16 型人格測驗&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", Arial, sans-serif; margin: 24px; line-height: 1.6; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.wrap { max-width: 980px; margin: 0 auto; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 { margin: 0 0 8px; font-size: 26px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hint { color: #555; margin-bottom: 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.grid { display: grid; grid-template-columns: 1fr; gap: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.q { border: 1px solid #ddd; border-radius: 12px; padding: 14px 14px 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.q h3 { margin: 0 0 10px; font-size: 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.opt { display: flex; gap: 14px; flex-wrap: wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.small { font-size: 13px; color: #666; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section { margin: 18px 0 10px; padding: 10px 12px; border-radius: 12px; background: #fafafa; border: 1px solid #eee; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section-title { font-weight: 700; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button { padding: 10px 14px; border-radius: 12px; border: 1px solid #ccc; background: #fff; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>button.primary { border-color: #111; background: #111; color: #fff; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.warn { color: #b00020; margin-top: 10px; display:none; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.result { margin-top: 22px; padding: 16px; border: 1px solid #ddd; border-radius: 14px; background: #fafafa; display:none; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tag { display:inline-block; padding: 2px 10px; border: 1px solid #ddd; border-radius: 999px; margin-left: 8px; font-size: 12px; color:#444; background:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.type-title { font-size: 20px; font-weight: 800; margin: 6px 0 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ul { margin: 8px 0 0 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scores { display:grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.score-line { padding: 10px 12px; border-radius: 12px; border: 1px solid #e6e6e6; background:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bar { height: 10px; background: #eee; border-radius: 999px; overflow: hidden; margin-top: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.bar &gt; div { height: 100%; width: 50%; background: #bbb; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.two { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.result-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background:#111; color:#fff; padding:10px 12px; border-radius: 999px; font-size: 13px; opacity:0; pointer-events:none; transition: opacity .2s; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.toast.show { opacity:1; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 740px) { .two { grid-template-columns: 1fr; } }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;div class="wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;獸醫 16 型人格測驗 &lt;span class="tag"&gt;20 題｜4 構面｜二選一&lt;/span&gt;&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="hint" id="topHint"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>作答方式：每題選一個選項；該選項對應的字母 +1。&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="quiz" class="grid"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="actions" id="mainActions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="primary" id="btnCalc"&gt;計算結果&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="btnReset"&gt;重填&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="msg" class="warn"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="result" class="result"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;你的四字母：&lt;span class="mono" id="code"&gt;&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="type-title" id="typeTitle"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="typeTrait"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="margin-top:10px;"&gt;&lt;b&gt;代表句：&lt;/b&gt;&lt;span id="typeQuote"&gt;&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="result-actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="btnCopyLink"&gt;複製分享連結&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="primary" id="btnCopyCard"&gt;複製結果卡&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;hr style="border:none;border-top:1px solid #e5e5e5;margin:16px 0;" /&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="font-weight:700;margin-bottom:8px;"&gt;各構面分數（含翻盤提示）&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="scores" class="scores"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="toast" class="toast"&gt;已複製&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>資料區：題目與結果</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">const dims = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ keyA: "B", keyB: "T", name: "社交能量（B / T）", param: "bt" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ keyA: "P", keyB: "V", name: "工作風格（P / V）", param: "pv" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ keyA: "C", keyB: "D", name: "決策模式（C / D）", param: "cd" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ keyA: "O", keyB: "F", name: "應變節奏（O / F）", param: "of" },</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">const questions = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 0, text: "Q1｜忙到爆炸的一天結束後，你比較想：", aText: "跟同事一起抱怨＋取暖（B）", bText: "立刻進入省電模式（T）", aKey:"B", bKey:"T" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 0, text: "Q2｜休息時間你通常：", aText: "找人一起吃飯聊天（B）", bText: "一個人滑手機更舒服（T）", aKey:"B", bKey:"T" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 0, text: "Q3｜遇到新來的實習生時你：", aText: "立刻變成熱心前輩（B）", bText: "默默觀察再決定要不要說話（T）", aKey:"B", bKey:"T" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 0, text: "Q4｜開會時你比較：", aText: "會忍不住插話補充（B）", bText: "只在必要時發言（T）", aKey:"B", bKey:"T" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 0, text: "Q5｜同事約下班聚餐你通常：", aText: "只要不是太累就去（B）", bText: "心裡先想「我只想趕快回家...」（T）", aKey:"B", bKey:"T" },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 1, text: "Q6｜面對病例時你比較像：", aText: "SOP 就是我的安全感（P）", bText: "先靠直覺再慢慢驗證（V）", aKey:"P", bKey:"V" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 1, text: "Q7｜學新進的儀器時你：", aText: "一定要有操作步驟表（P）", bText: "摸一摸就大概懂了（V）", aKey:"P", bKey:"V" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 1, text: "Q8｜正在打病歷時你：", aText: "格式一定要整齊漂亮（P）", bText: "重點寫到就好（V）", aKey:"P", bKey:"V" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 1, text: "Q9｜遇到複雜狀況你：", aText: "先翻紀錄或是 Paper 找依據（P）", bText: "先想可能性再說（V）", aKey:"P", bKey:"V" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 1, text: "Q10｜你比較擅長：", aText: "把例行工作做得很穩（P）", bText: "處理突發奇怪案件（V）", aKey:"P", bKey:"V" },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 2, text: "Q11｜遇到醫療糾紛時你先想：", aText: "是否是專業的問題，對錯在哪（C）", bText: "主人現在的情緒很緊繃，我要怎麼安撫主人（D）", aKey:"C", bKey:"D" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 2, text: "Q12｜同事出包時你會：", aText: "先講重點怎麼修正（C）", bText: "先說「沒事沒事」（D）", aKey:"C", bKey:"D" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 2, text: "Q13｜安撫主人你比較像：", aText: "說明風險與數據（C）", bText: "用語氣跟態度安撫（D）", aKey:"C", bKey:"D" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 2, text: "Q14｜做決定時你：", aText: "用腦袋分析（C）", bText: "用心感覺（D）", aKey:"C", bKey:"D" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 2, text: "Q15｜你更在意：", aText: "把事情做對（C）", bText: "不要傷感情（D）", aKey:"C", bKey:"D" },</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 3, text: "Q16｜班表被臨時更動時你：", aText: "內心會小崩潰（O）", bText: "覺得「好喔 OK」（F）", aKey:"O", bKey:"F" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 3, text: "Q17｜每天工作你偏好：", aText: "先排好順序再做（O）", bText: "來上班之後，有什麼做什麼（F）", aKey:"O", bKey:"F" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 3, text: "Q18｜補病歷時你通常：", aText: "當天一定清完（O）", bText: "相信明天的我會處理（F）", aKey:"O", bKey:"F" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 3, text: "Q19｜遇到超時掛號的你：", aText: "心裡 OS 很多（O）", bText: "直接接就對了（F）", aKey:"O", bKey:"F" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{ dimIndex: 3, text: "Q20｜臨時有同事請假需要支援時你：", aText: "會希望提前知道與安排（O）", bText: "現場需要就直接上，有錢不賺，王八蛋（F）", aKey:"O", bKey:"F" },</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">const typeMap = {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BPCO": { title: "🐶【德國牧羊犬型獸醫】", trait: ["紀律支柱型","外向可靠","重流程、講效率","團隊核心人物"], quote: "「交給我，我處理。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BPCF": { title: "🐕【米格魯型獸醫】", trait: ["活力執行者","熱心又務實","做事有效率"], quote: "「邊做邊調整！」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BPDO": { title: "🐕【黃金獵犬型獸醫】", trait: ["暖心行動派","熱情又負責","病主最安心"], quote: "「我懂你，我來幫忙。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BPDF": { title: "🐕【柯基型獸醫】", trait: ["親切實務型","可愛又好相處","做事接地氣"], quote: "「沒事的～慢慢來。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BVCO": { title: "🐱【孟加拉貓型獸醫】", trait: ["策略領導型","直覺強","善於規劃"], quote: "「讓我想一下全局。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BVCF": { title: "🐱【豹貓型獸醫】", trait: ["機動救火隊","靈活又理性"], quote: "「突發？我OK。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BVDO": { title: "🐶【邊境牧羊犬型】", trait: ["熱血領隊型","有想法又貼心"], quote: "「我們一起搞定！」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"BVDF": { title: "🐶【柴犬型獸醫】", trait: ["氣氛王者","團隊開心果"], quote: "「我來，我來！」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TPCO": { title: "🐱【英國短毛貓型】", trait: ["冷靜專業派","穩定可靠"], quote: "「先按 SOP 走。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TPCF": { title: "🐱【俄羅斯藍貓型】", trait: ["低調效率型","安靜但強"], quote: "「默默把事做好。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TPDO": { title: "🐶【法鬥型獸醫】", trait: ["溫和實幹派"], quote: "「一步一步來。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TPDF": { title: "🐱【布偶貓型獸醫】", trait: ["佛系暖心型"], quote: "「大家都辛苦了。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TVCO": { title: "🐱【挪威森林貓型】", trait: ["分析策略型"], quote: "「我先研究一下。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TVCF": { title: "🐱【暹羅貓型】", trait: ["冷靜彈性型"], quote: "「隨機應變。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TVDO": { title: "🐶【拉布拉多型】", trait: ["內斂領導者"], quote: "「穩穩地做就好。」" },</p>
+<p class="p1"><span class="Apple-converted-space">  </span>"TVDF": { title: "🐶【薩摩耶型】", trait: ["溫柔智者型"], quote: "「沒事，我陪你。」" },</p>
+<p class="p1">};</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>防亂改：sig（用 WebCrypto SHA-256）</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">// 你可以改這個 SALT（像密碼一樣），別人就更難「照抄算簽名」</p>
+<p class="p1">const SIG_SALT = "vet-16type-v1::change-me";</p>
+<p class="p2"><br></p>
+<p class="p1">function canonicalString(code, paramsObj) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 固定順序組字串，避免參數順序不同導致簽名不同</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return `r=${code}&amp;bt=${paramsObj.bt}&amp;pv=${paramsObj.pv}&amp;cd=${paramsObj.cd}&amp;of=${paramsObj.of}&amp;salt=${SIG_SALT}`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">async function sha256Hex(str) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const enc = new TextEncoder().encode(str);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const buf = await crypto.subtle.digest("SHA-256", enc);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return Array.from(new Uint8Array(buf)).map(b =&gt; b.toString(16).padStart(2, "0")).join("");</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">async function makeSig(code, pairs) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const canon = canonicalString(code, pairs);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const hex = await sha256Hex(canon);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 取短一點就好（仍足夠防手改），16 個 hex = 64bits</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return hex.slice(0, 16);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>工具</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">function toast(text) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const t = document.getElementById("toast");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>t.textContent = text;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>t.classList.add("show");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>setTimeout(() =&gt; t.classList.remove("show"), 1200);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">async function copyText(text) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>await navigator.clipboard.writeText(text);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast("已複製 ✅");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ta = document.createElement("textarea");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ta.value = text;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.body.appendChild(ta);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>ta.select();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.execCommand("copy");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.body.removeChild(ta);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>toast("已複製 ✅");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function flipHint(aKey, aScore, bKey, bScore) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const diff = Math.abs(aScore - bScore);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const need = Math.floor(diff / 2) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const leader = aScore &gt; bScore ? aKey : bKey;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return `目前 ${leader} 領先｜差 ${need} 題翻盤`;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function encodePair(a, b) { return `${a}-${b}`; }</p>
+<p class="p1">function decodePair(str) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!/^\d-\d$/.test(str)) return null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const [a, b] = str.split("-").map(x =&gt; parseInt(x, 10));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if ([a,b].some(n =&gt; isNaN(n) || n &lt; 0 || n &gt; 5)) return null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (a + b !== 5) return null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (a === b) return null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return { a, b };</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>UI Render</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">function renderQuiz() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const root = document.getElementById("quiz");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>root.innerHTML = "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>dims.forEach((d, dimIndex) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const sec = document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sec.className = "section";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>sec.innerHTML = `&lt;div class="section-title"&gt;🧩 ${d.name}&lt;/div&gt;&lt;div class="small"&gt;（此構面：${d.keyA} vs ${d.keyB}，共 5 題）&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>root.appendChild(sec);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>questions</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.map((q, idx) =&gt; ({ q, idx }))</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.filter(x =&gt; x.q.dimIndex === dimIndex)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.forEach(({ q, idx }) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const qId = `q${idx}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const div = document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>div.className = "q";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>div.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3&gt;${q.text}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="opt"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;&lt;input type="radio" name="${qId}" value="A" /&gt; A. ${q.aText}&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label&gt;&lt;input type="radio" name="${qId}" value="B" /&gt; B. ${q.bText}&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="small"&gt;選 A → ${q.aKey} +1 ｜ 選 B → ${q.bKey} +1&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>root.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function getAnswers() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return questions.map((_, i) =&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.querySelector(`input[name="q${i}"]:checked`)?.value || null</p>
+<p class="p1"><span class="Apple-converted-space">  </span>);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>計算 / 顯示 / 分享</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">function computeFromAnswers(answers) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>answers.forEach((ans, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const q = questions[i];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const key = (ans === "A") ? q.aKey : q.bKey;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>score[key] += 1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const letters = dims.map(d =&gt; (score[d.keyA] &gt; score[d.keyB]) ? d.keyA : d.keyB);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const code = letters.join("");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pairs = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dims.forEach(d =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pairs[d.param] = encodePair(score[d.keyA], score[d.keyB]);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>return { score, code, pairs };</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">async function setShareParamsWithSig({code, pairs}) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const sig = await makeSig(code, pairs);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = new URL(window.location.href);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>url.searchParams.set("r", code);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dims.forEach(d =&gt; url.searchParams.set(d.param, pairs[d.param]));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>url.searchParams.set("sig", sig);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.history.replaceState({}, "", url.toString());</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function renderResult({score, code}) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const info = typeMap[code] || { title: "未定義結果", trait: ["請補上 typeMap 對照"], quote: "" };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("code").textContent = code;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("typeTitle").textContent = info.title;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const traitHTML = Array.isArray(info.trait)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>? `&lt;ul&gt;${info.trait.map(t =&gt; `&lt;li&gt;${t}&lt;/li&gt;`).join("")}&lt;/ul&gt;`</p>
+<p class="p1"><span class="Apple-converted-space">    </span>: `&lt;div&gt;${info.trait}&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("typeTrait").innerHTML = traitHTML;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("typeQuote").textContent = info.quote || "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const scoresBox = document.getElementById("scores");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>scoresBox.innerHTML = "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>dims.forEach(d =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = score[d.keyA];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const b = score[d.keyB];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const winner = a &gt; b ? d.keyA : d.keyB;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const card = document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>card.className = "score-line";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>card.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="font-weight:700;"&gt;${d.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="two"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;${d.keyA}：&lt;span class="mono"&gt;${a}&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;${d.keyB}：&lt;span class="mono"&gt;${b}&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="small"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>結果：&lt;b&gt;${winner}&lt;/b&gt; ｜ &lt;span class="mono"&gt;${d.keyA} ${a} / ${d.keyB} ${b}&lt;/span&gt; ｜ ${flipHint(d.keyA, a, d.keyB, b)}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="bar" title="${d.keyA} vs ${d.keyB}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="width:${(a/5)*100}%"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="small"&gt;長條為 ${d.keyA} 佔比（0~5）&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>scoresBox.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("result").style.display = "block";</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function buildResultCardText({score, code}) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const info = typeMap[code] || { title: "未定義結果", trait: [], quote: "" };</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = window.location.href;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const dimLines = dims.map(d =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const a = score[d.keyA], b = score[d.keyB];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const winner = a &gt; b ? d.keyA : d.keyB;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA, a, d.keyB, b)}）`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}).join("\n");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const traits = Array.isArray(info.trait) &amp;&amp; info.trait.length</p>
+<p class="p1"><span class="Apple-converted-space">    </span>? info.trait.map(t =&gt; `- ${t}`).join("\n")</p>
+<p class="p1"><span class="Apple-converted-space">    </span>: "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>return [</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`【獸醫 16 型人格測驗結果】`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`四字母：${code}`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`${info.title}`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>traits ? `\n特質：\n${traits}` : "",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>info.quote ? `\n代表句：${info.quote}` : "",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`\n構面分數：\n${dimLines}`,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`\n分享連結：${url}`</p>
+<p class="p1"><span class="Apple-converted-space">  </span>].filter(Boolean).join("\n");</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">async function calcFromUI() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msg.style.display = "none";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msg.textContent = "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const answers = getAnswers();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const missing = answers.map((v, i) =&gt; v ? null : i + 1).filter(Boolean);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (missing.length) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.textContent = `你還有 ${missing.length} 題未作答：第 ${missing.join(", ")} 題`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const computed = computeFromAnswers(answers);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderResult({ score: computed.score, code: computed.code });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("result").scrollIntoView({ behavior: "smooth" });</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function resetAll() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('input[type="radio"]').forEach(el =&gt; el.checked = false);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("result").style.display = "none";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msg.style.display = "none";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>msg.textContent = "";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = new URL(window.location.href);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>["r","sig", ...dims.map(d =&gt; d.param)].forEach(k =&gt; url.searchParams.delete(k));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.history.replaceState({}, "", url.toString());</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("mainActions").style.display = "";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("topHint").innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`作答方式：每題選一個選項；該選項對應的字母 +1。&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.scrollTo({ top: 0, behavior: "smooth" });</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>讀取分享連結（含 sig）</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">async function showResultFromParamsIfAny() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = new URL(window.location.href);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const r = (url.searchParams.get("r") || "").toUpperCase().trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!r) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const codeOk = /^[BT][PV][CD][OF]$/.test(r) &amp;&amp; typeMap[r];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!codeOk) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const sig = (url.searchParams.get("sig") || "").trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!sig) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.textContent = "此分享連結缺少驗證碼（sig），可能已被修改或版本過舊。";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 解析四組分數</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const pairs = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>for (const d of dims) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const raw = (url.searchParams.get(d.param) || "").trim();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pair = decodePair(raw);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!pair) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.textContent = "此分享連結的分數參數不完整或不合法（需為 5 題制，例如 4-1）。";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pairs[d.param] = raw;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>score[d.keyA] = pair.a;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>score[d.keyB] = pair.b;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 分數必須與 r 的勝負一致</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const winner = (pair.a &gt; pair.b) ? d.keyA : d.keyB;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const expected = r[dims.indexOf(d)];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (winner !== expected) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.textContent = "分享連結的 r 與分數勝負不一致，可能被手動修改。";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 驗證 sig</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const expectedSig = await makeSig(r, pairs);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (expectedSig !== sig) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.textContent = "此分享連結已被修改（sig 驗證失敗）。請重新產生分享連結。";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 進入分享展示模式</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("topHint").innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">    </span>`你正在查看分享結果：&lt;span class="mono"&gt;${r}&lt;/span&gt;（此連結包含真實分數，且已通過驗證）`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("mainActions").style.display = "none";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderResult({ score, code: r });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById("result").scrollIntoView({ behavior: "smooth" });</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/** =========================</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>初始化</p>
+<p class="p1"><span class="Apple-converted-space"> </span>*<span class="Apple-converted-space">  </span>========================= */</p>
+<p class="p2"><br></p>
+<p class="p1">renderQuiz();</p>
+<p class="p1">showResultFromParamsIfAny();</p>
+<p class="p2"><br></p>
+<p class="p1">document.getElementById("btnCalc").addEventListener("click", calcFromUI);</p>
+<p class="p1">document.getElementById("btnReset").addEventListener("click", resetAll);</p>
+<p class="p2"><br></p>
+<p class="p1">document.getElementById("btnCopyLink").addEventListener("click", async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = new URL(window.location.href);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const hasR = url.searchParams.get("r");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const hasSig = url.searchParams.get("sig");</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!hasR || !hasSig) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.textContent = "請先完成 20 題並按「計算結果」，才會產生可分享的連結（含 sig）。";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>copyText(window.location.href);</p>
+<p class="p1">});</p>
+<p class="p2"><br></p>
+<p class="p1">document.getElementById("btnCopyCard").addEventListener("click", async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const url = new URL(window.location.href);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const r = (url.searchParams.get("r") || "").toUpperCase().trim();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const sig = (url.searchParams.get("sig") || "").trim();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 若 URL 有完整參數，先驗 sig 再複製（避免複製到被改過的連結）</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (r &amp;&amp; typeMap[r] &amp;&amp; sig) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const pairs = {};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>for (const d of dims) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const raw = (url.searchParams.get(d.param) || "").trim();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const pair = decodePair(raw);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!pair) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>msg.textContent = "目前網址缺少完整分數參數，請重新計算結果後再複製結果卡。";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pairs[d.param] = raw;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>score[d.keyA] = pair.a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>score[d.keyB] = pair.b;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const expectedSig = await makeSig(r, pairs);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (expectedSig !== sig) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>msg.textContent = "目前網址的 sig 驗證失敗（可能被改過）。請重新計算結果產生新連結。";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>copyText(buildResultCardText({ score, code: r }));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// 否則：使用作答重算（也會寫入 URL + sig）</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const answers = getAnswers();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (answers.some(v =&gt; !v)) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const msg = document.getElementById("msg");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.style.display = "block";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>msg.textContent = "要複製結果卡前，請先完成 20 題並計算結果。";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const computed = computeFromAnswers(answers);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>renderResult({ score: computed.score, code: computed.code });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>copyText(buildResultCardText({ score: computed.score, code: computed.code }));</p>
+<p class="p1">});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
