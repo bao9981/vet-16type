@@ -15,7 +15,12 @@
       --shadow: 0 14px 34px rgba(0,0,0,.08);
       --radius:18px;
       --radius-lg:26px;
+
+      /* ✅ 結果圖尺寸：寬不變；高度依 types.jpg 單格比例 2:3（=1.5） */
+      --spriteW: 260px;
+      --spriteAR: 1.5; /* height = width * 1.5 */
     }
+
     *{box-sizing:border-box;}
     body{
       margin:0;
@@ -85,9 +90,13 @@
     }
     .choice:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(0,0,0,.07);}
     .choice input{width:18px;height:18px;accent-color:#111;}
-    .choice .label{font-weight:800;min-width:22px;}
-
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+    .choice .label{
+      font-weight:800;
+      min-width:22px;
+    }
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;
+    }
     button{
       padding:11px 14px;
       border-radius:14px;
@@ -121,36 +130,38 @@
       box-shadow:var(--shadow);
       display:none;
     }
+
+    /* ✅ 让图片和文字更好对齐：桌面左右；手机自动居中换行 */
     .result-hero{
       display:flex;
       gap:16px;
-      align-items:flex-start; /* ✅ 文字对齐更稳 */
+      align-items:flex-start;
       justify-content:flex-start;
       flex-wrap:wrap;
     }
 
-    /* ✅ 关键：结果图片框（按正确比例自动缩放，不串格） */
+    /* ✅ 关键：宽不变，高度按 2:3；不会截到下一张 */
     .type-sprite{
-      /* 你想更小就改这里：--spriteW */
-      --spriteW: 320px;
-      width: min(var(--spriteW), 100%);
-      max-width: 360px;
-
-      /* ✅ types.jpg 每格尺寸：宽 1365/4=341.25，高 2048/4=512 */
-      aspect-ratio: 341.25 / 512;
-      border-radius: 28px;
+      width:var(--spriteW);
+      height:calc(var(--spriteW) * var(--spriteAR));
+      border-radius:28px;
       background:#fff;
       border:1px solid var(--line);
       box-shadow:0 10px 26px rgba(0,0,0,.06);
-      overflow:hidden;
 
-      /* ✅ 用原图像素尺寸，避免百分比缩放导致偏移 */
-      background-image:url("types.jpg");
+      background-image:url("types.jpg"); /* ✅ 放在 repo 根目錄：types.jpg */
       background-repeat:no-repeat;
-      background-size:1365px 2048px;
-      background-position:0px 0px;
+      background-size:400% 400%; /* 4x4 */
+      background-position:0% 0%;
 
       flex:0 0 auto;
+
+      /* ✅ 居中（尤其在 wrap 到下一行时） */
+      margin:0 auto;
+      display:block;
+
+      /* ✅ 防止出现“半像素露边” */
+      image-rendering:auto;
     }
 
     .type-meta{min-width:240px;flex:1;}
@@ -268,9 +279,9 @@
 
 <script>
 /** =========================================================
- * ✅ 只要改这里（你已填好）
+ * ✅ 你只需要改一個地方（已幫你填好）
  * - STATS_ENDPOINT：你的 Apps Script Web App URL（/exec）
- * - SIG_SALT：建议换随机字串
+ * - SIG_SALT：建議改成你自己的亂碼，防止別人偽造 sig
  * ========================================================= */
 const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzVplWUAACJfptBOfutMZF7O0TipbL7Wg6OlUrZtm8v25_ylTtWjW2EPjsJb1I15bgnOg/exec";
 const SIG_SALT = "vet-16type-v3::please-change-this-to-random";
@@ -315,7 +326,7 @@ const questions = [
 ];
 
 /** =========================
- *  16型（依你最新内容）
+ *  16型（✅ 依你最新內容更新：特質與代表句）
  *  ========================= */
 const typeMap = {
   "BPCO": { title:"🐶【德國牧羊犬型】", trait:["紀律支柱型","重流程、講效率","團隊核心人物"], quote:"「交給我，我處理。」" },
@@ -339,7 +350,7 @@ const typeMap = {
   "TVDF": { title:"🐶【大白熊型】", trait:["溫柔智者型","重視溫度","情感豐富"], quote:"「沒事，我陪你。」" },
 };
 
-/** ✅ sprite 顺序（左到右、上到下） */
+/** ✅ types.jpg 4x4 sprite 順序（左到右、上到下） */
 const typeOrder = [
   "BPCO","BPCF","BPDO","BPDF",
   "BVCO","BVCF","BVDO","BVDF",
@@ -347,14 +358,8 @@ const typeOrder = [
   "TVCO","TVCF","TVDO","TVDF"
 ];
 
-/** ✅ types.jpg 实际尺寸 & 每格尺寸（你这张是 1365x2048） */
-const SPRITE_W = 1365;
-const SPRITE_H = 2048;
-const TILE_W = SPRITE_W / 4;   // 341.25
-const TILE_H = SPRITE_H / 4;   // 512
-
 /** =========================
- *  sig（SHA-256）
+ *  sig 防亂改（SHA-256）
  *  ========================= */
 function canonicalString(code, paramsObj) {
   return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
@@ -412,21 +417,21 @@ function decodePair(str){
 }
 
 /** =========================
- *  ✅ 精准对位：用 px 位移，不用百分比
+ *  16圖 Sprite：依 code 設定背景位置
  *  ========================= */
 function setSpriteForCode(code){
   const el=document.getElementById("typeSprite");
   const idx=typeOrder.indexOf(code);
-  if(idx<0){ el.style.backgroundPosition="0px 0px"; return; }
-  const col = idx % 4;
-  const row = Math.floor(idx / 4);
-  const x = -(col * TILE_W);
-  const y = -(row * TILE_H);
-  el.style.backgroundPosition = `${x}px ${y}px`;
+  if(idx<0){ el.style.backgroundPosition="0% 0%"; return; }
+  const col=idx%4;
+  const row=Math.floor(idx/4);
+  const x=(col*100)/3;
+  const y=(row*100)/3;
+  el.style.backgroundPosition=`${x}% ${y}%`;
 }
 
 /** =========================
- *  UI Render
+ *  UI Render（不顯示括號字母、不顯示「選A→」提示）
  *  ========================= */
 function renderQuiz(){
   const root=document.getElementById("quiz");
@@ -557,27 +562,26 @@ function buildResultCardText({score,code}){
 }
 
 /** =========================
- *  ✅ 統計：避免 preflight 的写法（text/plain）
+ *  統計：送出 + 讀取 + 顯示（✅ 修复：避免 CORS 预检）
  *  ========================= */
 async function sendStatsRecord(payload){
-  if(!STATS_ENDPOINT) return false;
+  if(!STATS_ENDPOINT) return { ok:false, err:"NO_ENDPOINT" };
   try{
+    // ✅ 不要加 JSON content-type，避免 Apps Script/CORS 预检导致 POST 失败
     await fetch(STATS_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" }, // ✅ 避免 application/json 触发 preflight
-      body: JSON.stringify(payload),
-      cache: "no-store"
+      method:"POST",
+      body: JSON.stringify(payload)
     });
-    return true;
+    return { ok:true };
   }catch(e){
-    return false;
+    return { ok:false, err: String(e) };
   }
 }
 async function loadStatsCounts(){
   if(!STATS_ENDPOINT) return null;
   try{
-    const res = await fetch(`${STATS_ENDPOINT}?t=${Date.now()}`, { cache:"no-store" });
-    const data = await res.json();
+    const res=await fetch(STATS_ENDPOINT, { method:"GET" });
+    const data=await res.json();
     return data && data.counts ? data.counts : {};
   }catch(e){
     return null;
@@ -585,6 +589,7 @@ async function loadStatsCounts(){
 }
 function renderStatsUI(counts,myCode){
   if(!counts) return;
+
   const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
   const total=entries.reduce((s,[,v])=>s+v,0);
   const mine=counts[myCode] || 0;
@@ -611,6 +616,7 @@ function renderStatsUI(counts,myCode){
  *  ========================= */
 async function calcFromUI(){
   hideMsg();
+
   const answers=getAnswers();
   const missing=answers.map((v,i)=>v?null:i+1).filter(Boolean);
   if(missing.length){
@@ -623,7 +629,7 @@ async function calcFromUI(){
   renderResult({score:computed.score,code:computed.code});
 
   if(STATS_ENDPOINT){
-    const ok = await sendStatsRecord({
+    const post = await sendStatsRecord({
       type: computed.code,
       r: computed.code,
       bt: computed.pairs.bt,
@@ -632,17 +638,25 @@ async function calcFromUI(){
       of: computed.pairs.of,
       ua: navigator.userAgent
     });
-    const counts = await loadStatsCounts();
-    if(counts) renderStatsUI(counts, computed.code);
-    if(!ok){
-      // 不挡主流程，但给你一个可见提示，方便你知道是否真的写入
-      // （如果你不想显示，把下面两行删掉）
-      // showMsg("統計寫入失敗：可能是 Apps Script 權限或部署設定問題");
+
+    const counts=await loadStatsCounts();
+    if(counts){
+      renderStatsUI(counts, computed.code);
+    }else{
+      // ✅ 统计读取失败时给一个提示（不挡使用）
+      document.getElementById("statsBox").style.display="block";
+      document.getElementById("statsHint").textContent = post.ok
+        ? "（已送出結果，但統計讀取失敗：可能 Apps Script 尚未回傳 CORS/JSON）"
+        : "（統計送出失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取）";
+      document.getElementById("statsTotal").textContent = "-";
+      document.getElementById("statsMine").textContent = `${computed.code}：-`;
+      document.getElementById("statsRank").innerHTML = `<div class="small">暫時無法讀取排行榜</div>`;
     }
   }
 
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
 }
+
 function resetAll(){
   document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);
   document.getElementById("result").style.display="none";
@@ -775,4 +789,3 @@ document.getElementById("btnCopyCard").addEventListener("click", async ()=>{
 </script>
 </body>
 </html>
-
