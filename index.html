@@ -86,6 +86,7 @@
     .choice:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(0,0,0,.07);}
     .choice input{width:18px;height:18px;accent-color:#111;}
     .choice .label{font-weight:800;min-width:22px;}
+
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
     button{
       padding:11px 14px;
@@ -109,7 +110,6 @@
       color:#b00020;
       display:none;
       font-weight:800;
-      white-space:pre-line;
     }
 
     .result{
@@ -121,34 +121,39 @@
       box-shadow:var(--shadow);
       display:none;
     }
-
-    /* ✅ 关键：让左图 + 右侧内容「齐头」而不是垂直置中 */
     .result-hero{
       display:flex;
       gap:16px;
-      align-items:flex-start; /* ✅ 修复对齐 */
+      align-items:flex-start; /* ✅ 文字对齐更稳 */
+      justify-content:flex-start;
       flex-wrap:wrap;
     }
 
-    /* ✅ sprite 容器：加 overflow hidden 防串格；加背景略放大减少边缘串图 */
+    /* ✅ 关键：结果图片框（按正确比例自动缩放，不串格） */
     .type-sprite{
-      width:260px;height:260px;border-radius:28px;
-      background:#fff;border:1px solid var(--line);
+      /* 你想更小就改这里：--spriteW */
+      --spriteW: 320px;
+      width: min(var(--spriteW), 100%);
+      max-width: 360px;
+
+      /* ✅ types.jpg 每格尺寸：宽 1365/4=341.25，高 2048/4=512 */
+      aspect-ratio: 341.25 / 512;
+      border-radius: 28px;
+      background:#fff;
+      border:1px solid var(--line);
       box-shadow:0 10px 26px rgba(0,0,0,.06);
-      background-image:url("types.jpg"); /* ✅ repo 根目錄：types.jpg */
+      overflow:hidden;
+
+      /* ✅ 用原图像素尺寸，避免百分比缩放导致偏移 */
+      background-image:url("types.jpg");
       background-repeat:no-repeat;
+      background-size:1365px 2048px;
+      background-position:0px 0px;
 
-      /* ✅ 防串格：轻微放大一点点（401%） */
-      background-size:401% 401%;
-
-      background-position:0% 0%;
       flex:0 0 auto;
-
-      overflow:hidden;            /* ✅ 防止出现隔壁图边缘 */
-      background-color:#fff;
     }
 
-    .type-meta{min-width:240px;flex:1;padding-top:4px;} /* ✅ 轻微上内边距让视觉更舒服 */
+    .type-meta{min-width:240px;flex:1;}
     .type-code{font-weight:900;font-size:18px;}
     .type-title{font-size:22px;font-weight:900;margin:8px 0 6px;}
     ul{margin:10px 0 0 20px;}
@@ -156,12 +161,18 @@
     .result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
     hr.sep{border:none;border-top:1px solid #eee;margin:16px 0;}
     .scores{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;}
-    .score-line{padding:12px;border-radius:16px;border:1px solid var(--line);background:#fff;}
+    .score-line{
+      padding:12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
     .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
     @media (max-width:740px){.two{grid-template-columns:1fr;}}
     .bar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:8px;}
     .bar>div{height:100%;width:50%;background:#bbb;}
 
+    /* 統計 */
     .stats{
       margin-top:16px;
       padding:14px;
@@ -257,9 +268,9 @@
 
 <script>
 /** =========================================================
- * ✅ 你只需要改這裡兩個值
+ * ✅ 只要改这里（你已填好）
  * - STATS_ENDPOINT：你的 Apps Script Web App URL（/exec）
- * - SIG_SALT：建议换成随机字符串
+ * - SIG_SALT：建议换随机字串
  * ========================================================= */
 const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzVplWUAACJfptBOfutMZF7O0TipbL7Wg6OlUrZtm8v25_ylTtWjW2EPjsJb1I15bgnOg/exec";
 const SIG_SALT = "vet-16type-v3::please-change-this-to-random";
@@ -304,31 +315,31 @@ const questions = [
 ];
 
 /** =========================
- *  16型（✅ 依你最新內容更新）
+ *  16型（依你最新内容）
  *  ========================= */
 const typeMap = {
-  "BPCO": { title: "🐶【德國牧羊犬型】", trait: ["紀律支柱型","重流程、講效率","團隊核心人物"], quote: "「交給我，我處理。」" },
-  "BPCF": { title: "🐕【米格魯型】", trait: ["活力執行者","熱心又務實","做事有效率"], quote: "「邊做邊調整！」" },
-  "BPDO": { title: "🐕【黃金獵犬型】", trait: ["暖心行動派","熱情又負責","來看診的都安心"], quote: "「我懂你，我來幫忙。」" },
-  "BPDF": { title: "🐕【柯基型】", trait: ["親切實務型","可愛又好相處","做事接地氣"], quote: "「我來推動任務進展~。」" },
+  "BPCO": { title:"🐶【德國牧羊犬型】", trait:["紀律支柱型","重流程、講效率","團隊核心人物"], quote:"「交給我，我處理。」" },
+  "BPCF": { title:"🐕【米格魯型】", trait:["活力執行者","熱心又務實","做事有效率"], quote:"「邊做邊調整！」" },
+  "BPDO": { title:"🐕【黃金獵犬型】", trait:["暖心行動派","熱情又負責","來看診的都安心"], quote:"「我懂你，我來幫忙。」" },
+  "BPDF": { title:"🐕【柯基型】", trait:["親切實務型","可愛又好相處","做事接地氣"], quote:"「我來推動任務進展~。」" },
 
-  "BVCO": { title: "🐱【虎斑貓型】", trait: ["策略領導型","直覺強","善於規劃"], quote: "「讓我想一下全局。」" },
-  "BVCF": { title: "🐱【豹貓型】", trait: ["機動救火隊","機靈速決","靈活又理性"], quote: "「突發？我OK。」" },
-  "BVDO": { title: "🐶【邊境牧羊犬型】", trait: ["熱血領隊型","低調穩定","有想法又貼心"], quote: "「讓我們一起搞定！」" },
-  "BVDF": { title: "🐶【哈士奇型】", trait: ["氣氛王者","團隊開心果","靈活適應"], quote: "「我來，我來！」" },
+  "BVCO": { title:"🐱【虎斑貓型】", trait:["策略領導型","直覺強","善於規劃"], quote:"「讓我想一下全局。」" },
+  "BVCF": { title:"🐱【豹貓型】", trait:["機動救火隊","機靈速決","靈活又理性"], quote:"「突發？我OK。」" },
+  "BVDO": { title:"🐶【邊境牧羊犬型】", trait:["熱血領隊型","低調穩定","有想法又貼心"], quote:"「讓我們一起搞定！」" },
+  "BVDF": { title:"🐶【哈士奇型】", trait:["氣氛王者","團隊開心果","靈活適應"], quote:"「我來，我來！」" },
 
-  "TPCO": { title: "🐱【緬因貓型】", trait: ["冷靜專業派","穩定可靠","專注嚴謹"], quote: "「先按SOP走。」" },
-  "TPCF": { title: "🐱【斯芬克斯貓型】", trait: ["低調效率型","觀察敏銳","安靜但強"], quote: "「默默把事做好。」" },
-  "TPDO": { title: "🐶【喜樂蒂型】", trait: ["溫和實幹派","穩健做事","守護舒適氛圍"], quote: "「一步一步來。」" },
-  "TPDF": { title: "🐶【拉不拉多型】", trait: ["佛系暖心型","溫暖活潑","樂於分享"], quote: "「大家都辛苦了。」" },
+  "TPCO": { title:"🐱【緬因貓型】", trait:["冷靜專業派","穩定可靠","專注嚴謹"], quote:"「先按SOP走。」" },
+  "TPCF": { title:"🐱【斯芬克斯貓型】", trait:["低調效率型","觀察敏銳","安靜但強"], quote:"「默默把事做好。」" },
+  "TPDO": { title:"🐶【喜樂蒂型】", trait:["溫和實幹派","穩健做事","守護舒適氛圍"], quote:"「一步一步來。」" },
+  "TPDF": { title:"🐶【拉不拉多型】", trait:["佛系暖心型","溫暖活潑","樂於分享"], quote:"「大家都辛苦了。」" },
 
-  "TVCO": { title: "🐱【挪威森林貓型】", trait: ["分析策略型","推理嚴密","仔細分析"], quote: "「我先研究一下。」" },
-  "TVCF": { title: "🐱【暹羅貓型】", trait: ["冷靜彈性型","反應快速","創新行動"], quote: "「隨機應變。」" },
-  "TVDO": { title: "🐶【伯恩山型】", trait: ["內斂領導者","彈性務實","關懷備至"], quote: "「穩穩地做就好。」" },
-  "TVDF": { title: "🐶【大白熊型】", trait: ["溫柔智者型","重視溫度","情感豐富"], quote: "「沒事，我陪你。」" },
+  "TVCO": { title:"🐱【挪威森林貓型】", trait:["分析策略型","推理嚴密","仔細分析"], quote:"「我先研究一下。」" },
+  "TVCF": { title:"🐱【暹羅貓型】", trait:["冷靜彈性型","反應快速","創新行動"], quote:"「隨機應變。」" },
+  "TVDO": { title:"🐶【伯恩山型】", trait:["內斂領導者","彈性務實","關懷備至"], quote:"「穩穩地做就好。」" },
+  "TVDF": { title:"🐶【大白熊型】", trait:["溫柔智者型","重視溫度","情感豐富"], quote:"「沒事，我陪你。」" },
 };
 
-/** ✅ types.jpg 4x4 sprite 順序（左到右、上到下） */
+/** ✅ sprite 顺序（左到右、上到下） */
 const typeOrder = [
   "BPCO","BPCF","BPDO","BPDF",
   "BVCO","BVCF","BVDO","BVDF",
@@ -336,8 +347,14 @@ const typeOrder = [
   "TVCO","TVCF","TVDO","TVDF"
 ];
 
+/** ✅ types.jpg 实际尺寸 & 每格尺寸（你这张是 1365x2048） */
+const SPRITE_W = 1365;
+const SPRITE_H = 2048;
+const TILE_W = SPRITE_W / 4;   // 341.25
+const TILE_H = SPRITE_H / 4;   // 512
+
 /** =========================
- *  sig 防亂改（SHA-256）
+ *  sig（SHA-256）
  *  ========================= */
 function canonicalString(code, paramsObj) {
   return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
@@ -395,37 +412,21 @@ function decodePair(str){
 }
 
 /** =========================
- *  16圖 Sprite：依 code 設定背景位置
- *  ✅ 这里加入“微小偏移”避免边缘串格
+ *  ✅ 精准对位：用 px 位移，不用百分比
  *  ========================= */
 function setSpriteForCode(code){
   const el=document.getElementById("typeSprite");
   const idx=typeOrder.indexOf(code);
-  if(idx<0){ el.style.backgroundPosition="0% 0%"; return; }
-
-  const col=idx%4;           // 0..3
-  const row=Math.floor(idx/4); // 0..3
-
-  // 原本：0, 33.333, 66.666, 100
-  let x=(col*100)/3;
-  let y=(row*100)/3;
-
-  // ✅ 微调：往格子内部缩一点，减少“露出隔壁一条边”
-  // 你也可以改这个值：0.18 ~ 0.35 都行
-  const nudge = 0.25;
-  if(col===1) x += nudge;
-  if(col===2) x += nudge;
-  if(col===3) x += nudge;
-
-  if(row===1) y += nudge;
-  if(row===2) y += nudge;
-  if(row===3) y += nudge;
-
-  el.style.backgroundPosition=`${x}% ${y}%`;
+  if(idx<0){ el.style.backgroundPosition="0px 0px"; return; }
+  const col = idx % 4;
+  const row = Math.floor(idx / 4);
+  const x = -(col * TILE_W);
+  const y = -(row * TILE_H);
+  el.style.backgroundPosition = `${x}px ${y}px`;
 }
 
 /** =========================
- *  UI Render（已隱藏題目提示）
+ *  UI Render
  *  ========================= */
 function renderQuiz(){
   const root=document.getElementById("quiz");
@@ -466,7 +467,6 @@ function renderQuiz(){
       });
   });
 }
-
 function getAnswers(){
   return questions.map((_,i)=>document.querySelector(`input[name="q${i}"]:checked`)?.value || null);
 }
@@ -487,7 +487,6 @@ function computeFromAnswers(answers){
   dims.forEach(d=>pairs[d.param]=encodePair(score[d.keyA],score[d.keyB]));
   return {score,code,pairs};
 }
-
 async function setShareParamsWithSig({code,pairs}){
   const sig=await makeSig(code,pairs);
   const url=new URL(window.location.href);
@@ -496,7 +495,6 @@ async function setShareParamsWithSig({code,pairs}){
   url.searchParams.set("sig",sig);
   window.history.replaceState({}, "", url.toString());
 }
-
 function renderResult({score,code}){
   const info=typeMap[code] || {title:"未定義結果",trait:["請補上 typeMap"],quote:""};
   document.getElementById("code").textContent=code;
@@ -534,7 +532,6 @@ function renderResult({score,code}){
 
   document.getElementById("result").style.display="block";
 }
-
 function buildResultCardText({score,code}){
   const info=typeMap[code] || {title:"未定義結果",trait:[],quote:""};
   const url=window.location.href;
@@ -560,72 +557,40 @@ function buildResultCardText({score,code}){
 }
 
 /** =========================
- *  ✅ 統計：写入 + 读取
- *  - 写入：sendBeacon 优先（不吃 CORS），fetch(no-cors) 作为 fallback
- *  - 读取：fetch（需要 Apps Script 允许 CORS 才能读到）
- * ========================= */
-
-function toQuery(obj){
-  const p=new URLSearchParams();
-  Object.entries(obj).forEach(([k,v])=>p.set(k,String(v)));
-  return p.toString();
-}
-
+ *  ✅ 統計：避免 preflight 的写法（text/plain）
+ *  ========================= */
 async function sendStatsRecord(payload){
-  if(!STATS_ENDPOINT) return;
-
-  // ✅ 1) sendBeacon：最稳（GitHub Pages + Apps Script 常见跨域场景）
-  try{
-    const data = new Blob([JSON.stringify(payload)], {type:"text/plain"});
-    const ok = navigator.sendBeacon(STATS_ENDPOINT, data);
-    if(ok) return;
-  }catch(e){}
-
-  // ✅ 2) fallback：fetch no-cors（只能写，不能读返回）
+  if(!STATS_ENDPOINT) return false;
   try{
     await fetch(STATS_ENDPOINT, {
-      method:"POST",
-      mode:"no-cors",
-      headers:{ "Content-Type":"text/plain" },
-      body: JSON.stringify(payload)
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // ✅ 避免 application/json 触发 preflight
+      body: JSON.stringify(payload),
+      cache: "no-store"
     });
-  }catch(e){}
+    return true;
+  }catch(e){
+    return false;
+  }
 }
-
 async function loadStatsCounts(){
   if(!STATS_ENDPOINT) return null;
   try{
-    const res = await fetch(STATS_ENDPOINT, { method:"GET" });
+    const res = await fetch(`${STATS_ENDPOINT}?t=${Date.now()}`, { cache:"no-store" });
     const data = await res.json();
     return data && data.counts ? data.counts : {};
   }catch(e){
-    // ⚠️ 多半是 CORS 被挡
-    return { __error: "CORS_BLOCKED" };
+    return null;
   }
 }
-
 function renderStatsUI(counts,myCode){
-  const box = document.getElementById("statsBox");
-  const hint = document.getElementById("statsHint");
-
-  if(!counts){ box.style.display="none"; return; }
-  box.style.display="block";
-
-  if(counts.__error==="CORS_BLOCKED"){
-    hint.textContent =
-      "⚠️ 統計寫入已送出，但讀取被瀏覽器 CORS 限制擋住（Apps Script doGet 需允許跨域，才會顯示人次/排行榜）。";
-    document.getElementById("statsTotal").textContent = "-";
-    document.getElementById("statsMine").textContent = `${myCode}：-`;
-    document.getElementById("statsRank").innerHTML = `<div class="small">（目前無法讀取排行榜）</div>`;
-    return;
-  }
-
-  hint.textContent="（此統計為全體作答者彙總，刷新頁面可更新）";
-
-  const entries=Object.entries(counts).filter(([k])=>k!=="__error").sort((a,b)=>b[1]-a[1]);
-  const total=entries.reduce((s,[,v])=>s+Number(v||0),0);
+  if(!counts) return;
+  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const total=entries.reduce((s,[,v])=>s+v,0);
   const mine=counts[myCode] || 0;
 
+  document.getElementById("statsBox").style.display="block";
+  document.getElementById("statsHint").textContent="（此統計為全體作答者彙總，刷新頁面可更新）";
   document.getElementById("statsTotal").textContent=`${total}`;
   document.getElementById("statsMine").textContent=`${myCode}：${mine}`;
 
@@ -657,9 +622,8 @@ async function calcFromUI(){
   await setShareParamsWithSig({code:computed.code,pairs:computed.pairs});
   renderResult({score:computed.score,code:computed.code});
 
-  // ✅ 統計：写入 + 读取
   if(STATS_ENDPOINT){
-    await sendStatsRecord({
+    const ok = await sendStatsRecord({
       type: computed.code,
       r: computed.code,
       bt: computed.pairs.bt,
@@ -668,14 +632,17 @@ async function calcFromUI(){
       of: computed.pairs.of,
       ua: navigator.userAgent
     });
-
-    const counts=await loadStatsCounts();
+    const counts = await loadStatsCounts();
     if(counts) renderStatsUI(counts, computed.code);
+    if(!ok){
+      // 不挡主流程，但给你一个可见提示，方便你知道是否真的写入
+      // （如果你不想显示，把下面两行删掉）
+      // showMsg("統計寫入失敗：可能是 Apps Script 權限或部署設定問題");
+    }
   }
 
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
 }
-
 function resetAll(){
   document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);
   document.getElementById("result").style.display="none";
@@ -734,7 +701,6 @@ async function showResultFromParamsIfAny(){
 
   renderResult({score,code:r});
 
-  // 分享页也读统计（只读）
   if(STATS_ENDPOINT){
     const counts=await loadStatsCounts();
     if(counts) renderStatsUI(counts, r);
@@ -809,3 +775,4 @@ document.getElementById("btnCopyCard").addEventListener("click", async ()=>{
 </script>
 </body>
 </html>
+
