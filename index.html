@@ -5,257 +5,143 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>獸醫 16 型人格測驗</title>
   <style>
-    :root{
-      --bg:#f6f6f6;
-      --card:#ffffff;
-      --text:#111;
-      --muted:#666;
-      --line:#e8e8e8;
-      --shadow:0 12px 26px rgba(0,0,0,.08);
-      --shadow2:0 18px 34px rgba(0,0,0,.12);
-      --radius:18px;
-      --radius2:22px;
-      --black:#111;
-      --soft:#fafafa;
-    }
-    *{box-sizing:border-box}
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif;
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    .wrap{max-width:980px;margin:0 auto;padding:22px 18px 110px;}
-    h1{margin:6px 0 6px;font-size:28px;letter-spacing:.2px}
-    .tag{
-      display:inline-block;padding:4px 10px;border:1px solid var(--line);
-      border-radius:999px;font-size:12px;color:#444;background:#fff;margin-left:10px;
-      vertical-align:middle;
-    }
-    .hint{color:#444;margin:10px 0 14px}
-    .topbar{
-      position:sticky;top:0;z-index:20;
-      background:rgba(246,246,246,.92);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(0,0,0,.06);
-    }
-    .topbar-inner{max-width:980px;margin:0 auto;padding:12px 18px;}
-    .progress-row{display:flex;align-items:center;gap:12px}
-    .progress{
-      flex:1;height:12px;background:#eaeaea;border-radius:999px;overflow:hidden;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
-    }
-    .progress>div{height:100%;width:0%;background:#111;transition:width .2s ease}
-    .progress-text{min-width:120px;text-align:right;color:#444;font-size:13px}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px;}
-    .section{
-      margin:18px 0 8px;padding:12px 14px;border-radius:var(--radius2);
-      background:linear-gradient(180deg,#fff,#fbfbfb);
-      border:1px solid var(--line);
-      box-shadow:0 10px 22px rgba(0,0,0,.06);
-    }
-    .section-title{font-weight:800}
-    .small{font-size:13px;color:var(--muted)}
-    .q{
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      padding:14px;
-      background:var(--card);
-      box-shadow:var(--shadow);
-    }
-    .q h3{margin:0 0 10px;font-size:16px}
-    /* Option cards with illustrations */
-    .opt-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 8px;}
-    @media(max-width:740px){.opt-cards{grid-template-columns:1fr;}}
-    .opt-card{
-      border:1px solid #e7e7e7;
-      border-radius:18px;
-      background:#fff;
-      padding:14px;
-      box-shadow:0 10px 22px rgba(0,0,0,.06);
-      display:flex;flex-direction:column;gap:12px;
-      cursor:pointer;
-      transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-    .opt-card:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(0,0,0,.08);}
-    .opt-card.selected{border-color:#111;box-shadow:var(--shadow2);}
-    .opt-ill{
-      border-radius:16px;
-      border:1px solid #eee;
-      background: linear-gradient(180deg,#fff,#fafafa);
-      padding:10px;
-      display:flex;align-items:center;justify-content:center;
-      min-height:92px;
-    }
-    .opt-ill svg{width:96px;height:96px;}
-    .opt-meta{display:flex;gap:10px;align-items:flex-start;}
-    .opt-badge{
-      width:34px;height:34px;border-radius:12px;background:#111;color:#fff;
-      display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto;
-    }
-    .opt-text{font-size:15px;color:#222;line-height:1.55;}
-    .opt-pick{
-      display:flex;gap:10px;align-items:center;justify-content:center;
-      padding:10px 12px;border:1px solid #e7e7e7;border-radius:14px;background:#fafafa;
-      user-select:none;
-    }
-    .opt-card.selected .opt-pick{border-color:#111;background:#111;color:#fff;}
-    .opt-pick input{transform:scale(1.15);accent-color:#111;}
-    .opt-card.selected .opt-pick input{accent-color:#fff;}
+    body { font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", Arial, sans-serif; margin: 24px; line-height: 1.6; background:#f6f6f6; color:#111; }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    .hint { color: #555; margin-bottom: 16px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .q { border: 1px solid #e6e6e6; border-radius: 14px; padding: 14px 14px 10px; background:#fff; box-shadow:0 10px 22px rgba(0,0,0,.06); }
+    .q h3 { margin: 0 0 10px; font-size: 16px; }
+    .opt { display: flex; gap: 14px; flex-wrap: wrap; }
+    label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; padding:8px 10px; border-radius:12px; border:1px solid #eee; background:#fafafa; }
+    label:hover{ border-color:#d9d9d9; }
+    input[type="radio"]{ accent-color:#111; }
+    .small { font-size: 13px; color: #666; }
+    .section { margin: 18px 0 10px; padding: 10px 12px; border-radius: 14px; background: #fff; border: 1px solid #eee; box-shadow:0 10px 22px rgba(0,0,0,.06); }
+    .section-title { font-weight: 800; }
+    .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    button { padding: 10px 14px; border-radius: 12px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-weight:800; }
+    button.primary { border-color: #111; background: #111; color: #fff; }
+    .warn { color: #b00020; margin-top: 10px; display:none; font-weight:800; }
+    .result { margin-top: 22px; padding: 16px; border: 1px solid #e6e6e6; border-radius: 16px; background: #fff; display:none; box-shadow:0 14px 26px rgba(0,0,0,.08); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .tag { display:inline-block; padding: 2px 10px; border: 1px solid #ddd; border-radius: 999px; margin-left: 8px; font-size: 12px; color:#444; background:#fff; }
+    .type-title { font-size: 20px; font-weight: 900; margin: 10px 0 10px; }
+    ul { margin: 8px 0 0 20px; }
+    .scores { display:grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    .score-line { padding: 10px 12px; border-radius: 14px; border: 1px solid #eee; background:#fafafa; }
+    .bar { height: 10px; background: #eee; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .bar > div { height: 100%; width: 50%; background: #bbb; }
+    .two { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .result-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background:#111; color:#fff; padding:10px 12px; border-radius: 999px; font-size: 13px; opacity:0; pointer-events:none; transition: opacity .2s; }
+    .toast.show { opacity:1; }
+    @media (max-width: 740px) { .two { grid-template-columns: 1fr; } }
 
-    /* Bottom nav */
-    .bottom-nav{
-      position:fixed;left:0;right:0;bottom:0;z-index:50;
-      background:rgba(255,255,255,.92);
-      backdrop-filter: blur(10px);
-      border-top:1px solid rgba(0,0,0,.08);
+    /* ✅ 結果圖（用 types.jpg 當 4x4 sprite） */
+    .result-hero{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+    .type-sprite{
+      width:150px; height:150px; border-radius:18px; border:1px solid #eee;
+      background:#fff; box-shadow:0 12px 24px rgba(0,0,0,.08);
+      background-image:url("types.jpg"); /* ← 你的16格大圖檔名 */
+      background-repeat:no-repeat;
+      background-size:400% 400%; /* 4x4 */
+      background-position:0% 0%;
+      overflow:hidden;
     }
-    .bottom-inner{
-      max-width:980px;margin:0 auto;padding:12px 18px;
-      display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;
-    }
-    .btn{
-      padding:10px 14px;border-radius:14px;border:1px solid #cfcfcf;background:#fff;
-      cursor:pointer;font-weight:700;
-    }
-    .btn.primary{border-color:#111;background:#111;color:#fff;}
-    .btn.ghost{background:#fafafa;}
-    .nav-left,.nav-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .nav-mid{color:#444;font-size:13px}
-    .warn{color:#b00020;margin-top:10px;display:none;font-weight:700}
+    .type-meta{min-width:220px;}
+    .type-code{font-weight:900; font-size:18px;}
+    .type-note{color:#666; font-size:13px;}
 
-    /* Result */
-    .result{
-      margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:var(--radius2);
-      background:linear-gradient(180deg,#fff,#fbfbfb);
-      box-shadow:var(--shadow2);
-      display:none;
-    }
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;}
-    .type-title{font-size:20px;font-weight:900;margin:8px 0 10px;}
-    .scores{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px;}
-    .score-line{
-      padding:12px;border-radius:16px;border:1px solid #ededed;background:#fff;
-      box-shadow:0 8px 18px rgba(0,0,0,.05);
-    }
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    @media(max-width:740px){.two{grid-template-columns:1fr;}}
-    .bar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:8px;}
-    .bar>div{height:100%;width:50%;background:#bbb;}
-    .result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
-    hr{border:none;border-top:1px solid #e5e5e5;margin:16px 0;}
-    .toast{
-      position:fixed;left:50%;bottom:88px;transform:translateX(-50%);
-      background:#111;color:#fff;padding:10px 12px;border-radius:999px;
-      font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;
-      z-index:60;
-    }
-    .toast.show{opacity:1;}
-
-    /* Stats */
-    .stats{
-      margin-top:16px;padding:14px;border-radius:18px;border:1px solid var(--line);
-      background:#fff;box-shadow:0 10px 22px rgba(0,0,0,.06);
-    }
-    .stats h4{margin:0 0 10px;font-size:16px}
-    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    @media(max-width:740px){.stats-grid{grid-template-columns:1fr;}}
-    .stat-card{border:1px solid #eee;border-radius:16px;padding:12px;background:#fafafa;}
-    .stat-big{font-size:20px;font-weight:900}
-    .rank{margin-top:10px;border-top:1px solid #eee;padding-top:10px;}
-    .rank-item{display:flex;justify-content:space-between;gap:10px;padding:6px 0;}
-    .dim-chip{display:inline-block;border:1px solid #eee;border-radius:999px;padding:2px 10px;font-size:12px;background:#fff;color:#444}
+    /* ✅ 統計區 */
+    .stats{margin-top:16px; padding:14px; border:1px solid #eee; border-radius:16px; background:#fafafa;}
+    .stats h4{margin:0 0 8px; font-size:16px;}
+    .stats-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    @media (max-width: 740px){ .stats-grid{grid-template-columns:1fr;} }
+    .stat-card{border:1px solid #eee; border-radius:14px; padding:12px; background:#fff;}
+    .stat-big{font-size:22px; font-weight:900;}
+    .rank{margin-top:10px; padding-top:10px; border-top:1px solid #eee;}
+    .rank-item{display:flex; justify-content:space-between; gap:10px; padding:6px 0;}
+    .chip{display:inline-block; border:1px solid #eee; border-radius:999px; padding:2px 10px; font-size:12px; background:#fff; color:#444;}
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="progress-row">
-        <div class="progress" aria-label="進度">
-          <div id="progressFill"></div>
+<div class="wrap">
+  <h1>獸醫 16 型人格測驗 <span class="tag">20 題｜4 構面｜二選一</span></h1>
+  <div class="hint" id="topHint">
+    作答方式：每題選一個選項；該選項對應的字母 +1。<br/>
+    結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br/>
+    分享連結會包含真實分數與 sig 驗證，避免被亂改。
+  </div>
+
+  <div id="quiz" class="grid"></div>
+
+  <div class="actions" id="mainActions">
+    <button class="primary" id="btnCalc">計算結果</button>
+    <button id="btnReset">重填</button>
+  </div>
+
+  <div id="msg" class="warn"></div>
+
+  <div id="result" class="result">
+    <div class="result-hero">
+      <div class="type-sprite" id="typeSprite" aria-label="結果插圖"></div>
+      <div class="type-meta">
+        <div class="type-code">你的四字母：<span class="mono" id="code"></span></div>
+        <div class="type-note">（下方已顯示真實作答分數與翻盤提示）</div>
+        <div class="type-title" id="typeTitle"></div>
+      </div>
+    </div>
+
+    <div id="typeTrait"></div>
+    <div style="margin-top:10px;"><b>代表句：</b><span id="typeQuote"></span></div>
+
+    <div class="result-actions">
+      <button id="btnCopyLink">複製分享連結</button>
+      <button class="primary" id="btnCopyCard">複製結果卡</button>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #e5e5e5;margin:16px 0;" />
+
+    <div style="font-weight:900;margin-bottom:8px;">各構面分數（含翻盤提示）</div>
+    <div id="scores" class="scores"></div>
+
+    <!-- ✅ 統計（可選） -->
+    <div class="stats" id="statsBox" style="display:none;">
+      <h4>📊 全體結果統計 <span class="chip">可選功能</span></h4>
+      <div class="small" id="statsHint"></div>
+
+      <div class="stats-grid" style="margin-top:10px;">
+        <div class="stat-card">
+          <div class="small">目前已統計人次</div>
+          <div class="stat-big" id="statsTotal">-</div>
         </div>
-        <div class="progress-text" id="progressText">0 / 20</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <h1>獸醫 16 型人格測驗 <span class="tag">20 題｜4 構面｜二選一</span></h1>
-    <div class="hint" id="topHint">
-      作答方式：每題選一個選項；該選項對應的字母 +1。<br />
-      結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br />
-      分享方式：網址會帶上 <span class="mono">r / bt / pv / cd / of / sig</span>（含真實分數 + 防手改驗證）。
-    </div>
-
-    <div id="quiz" class="grid"></div>
-    <div id="msg" class="warn"></div>
-
-    <div id="result" class="result">
-      <div>你的四字母：<span class="mono" id="code"></span></div>
-      <div class="type-title" id="typeTitle"></div>
-      <div id="typeTrait"></div>
-      <div style="margin-top:10px;"><b>代表句：</b><span id="typeQuote"></span></div>
-
-      <div class="result-actions">
-        <button class="btn" id="btnCopyLink">複製分享連結</button>
-        <button class="btn primary" id="btnCopyCard">複製結果卡</button>
-        <button class="btn ghost" id="btnBackToQuiz">回到作答</button>
-      </div>
-
-      <hr />
-
-      <div style="font-weight:900;margin-bottom:8px;">各構面分數（含翻盤提示）</div>
-      <div id="scores" class="scores"></div>
-
-      <div class="stats" id="statsBox" style="display:none;">
-        <h4>📊 全體結果統計 <span class="dim-chip">可選功能</span></h4>
-        <div class="small" id="statsHint"></div>
-        <div class="stats-grid" style="margin-top:10px;">
-          <div class="stat-card">
-            <div class="small">目前已統計人次</div>
-            <div class="stat-big" id="statsTotal">-</div>
-          </div>
-          <div class="stat-card">
-            <div class="small">你的型（此型人數）</div>
-            <div class="stat-big" id="statsMine">-</div>
-          </div>
+        <div class="stat-card">
+          <div class="small">你的型（此型人數）</div>
+          <div class="stat-big" id="statsMine">-</div>
         </div>
-        <div class="rank" id="statsRank"></div>
       </div>
+
+      <div class="rank" id="statsRank"></div>
     </div>
   </div>
+</div>
 
-  <div class="bottom-nav">
-    <div class="bottom-inner">
-      <div class="nav-left">
-        <button class="btn ghost" id="btnPrev">上一題</button>
-        <button class="btn ghost" id="btnNext">下一題</button>
-      </div>
-      <div class="nav-mid" id="navMid">提示：點選卡片即可作答</div>
-      <div class="nav-right">
-        <button class="btn" id="btnReset">重填</button>
-        <button class="btn primary" id="btnCalc">計算結果</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="toast" class="toast">已複製</div>
+<div id="toast" class="toast">已複製</div>
 
 <script>
 /** =========================================================
- *  ✅ 你只需要改兩個地方：
- *  1) SIG_SALT：隨便換一串（像密碼），防同事模仿簽名
- *  2) STATS_ENDPOINT：若要全體統計，填 Apps Script Web App URL
- *     - 不做統計：保持空字串即可
+ * ✅ 你只需要改兩個地方
+ * 1) STATS_ENDPOINT：填你的 Apps Script Web App URL（/exec）
+ * 2) SIG_SALT：建議換一串亂碼當「簽名鹽」
  * ========================================================= */
 
-const SIG_SALT = "vet-16type-v1::change-me"; // 建議你換成自己的隨機字串
-const STATS_ENDPOINT = ""; // 例如 "https://script.google.com/macros/s/xxxxx/exec"（空字串＝不啟用統計）
+const STATS_ENDPOINT = ""; // ← 例如 "https://script.google.com/macros/s/XXXXX/exec"
+const SIG_SALT = "vet-16type-v1::change-me"; // 建議你改掉
 
 /** =========================
- *  資料：構面 / 題目 / 類型
+ *  題目與結果
  *  ========================= */
 
 const dims = [
@@ -310,95 +196,17 @@ const typeMap = {
   "TVDF": { title: "🐶【薩摩耶型】", trait: ["溫柔智者型"], quote: "「沒事，我陪你。」" },
 };
 
-/** =========================
- *  8 個字母插圖（內嵌 SVG）
- *  ========================= */
-
-const ICON_SVG = {
-  B: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gB" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#111"/>
-        <stop offset="1" stop-color="#555"/>
-      </linearGradient>
-    </defs>
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M30 70 C40 40, 60 40, 68 62 C78 52, 94 54, 88 72 C82 90, 52 94, 38 80 Z"
-          fill="url(#gB)" opacity="0.9"/>
-    <circle cx="55" cy="62" r="4" fill="#fff"/>
-  </svg>`,
-  T: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M40 66 C40 48, 56 40, 72 46 C86 52, 92 68, 80 80 C66 94, 40 86, 40 66 Z"
-          fill="#111" opacity="0.92"/>
-    <circle cx="38" cy="66" r="10" fill="#444" opacity="0.9"/>
-    <circle cx="78" cy="62" r="6" fill="#fff" opacity="0.9"/>
-  </svg>`,
-  P: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <rect x="32" y="30" width="56" height="70" rx="10" fill="#111" opacity="0.92"/>
-    <rect x="40" y="42" width="40" height="6" rx="3" fill="#fff" opacity="0.9"/>
-    <rect x="40" y="56" width="30" height="6" rx="3" fill="#fff" opacity="0.75"/>
-    <rect x="40" y="70" width="36" height="6" rx="3" fill="#fff" opacity="0.75"/>
-    <path d="M38 90 L50 78" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-    <path d="M50 78 L82 46" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-  </svg>`,
-  V: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M60 26 L74 52 L102 56 L80 74 L86 102 L60 88 L34 102 L40 74 L18 56 L46 52 Z"
-          fill="#111" opacity="0.92"/>
-    <circle cx="60" cy="62" r="10" fill="#fff" opacity="0.15"/>
-  </svg>`,
-  C: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M40 44 L30 34 L28 54 Z" fill="#111"/>
-    <path d="M80 44 L90 34 L92 54 Z" fill="#111"/>
-    <path d="M36 52 C36 38, 84 38, 84 52 C84 84, 36 84, 36 52 Z"
-          fill="#111" opacity="0.92"/>
-    <circle cx="50" cy="62" r="5" fill="#fff" opacity="0.85"/>
-    <circle cx="70" cy="62" r="5" fill="#fff" opacity="0.85"/>
-    <path d="M58 70 Q60 72 62 70" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
-  </svg>`,
-  D: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M34 52 C34 38, 86 38, 86 56 C86 90, 34 90, 34 56 Z"
-          fill="#111" opacity="0.92"/>
-    <path d="M36 52 L24 44 L26 66 Z" fill="#333"/>
-    <path d="M84 54 L98 46 L96 70 Z" fill="#333"/>
-    <circle cx="52" cy="64" r="5" fill="#fff" opacity="0.85"/>
-    <circle cx="70" cy="64" r="5" fill="#fff" opacity="0.85"/>
-    <path d="M56 74 Q60 80 64 74" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
-  </svg>`,
-  O: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <rect x="30" y="30" width="60" height="60" rx="14" fill="#111" opacity="0.92"/>
-    <path d="M30 46 H90" stroke="#fff" stroke-width="4" opacity="0.5"/>
-    <path d="M46 30 V90" stroke="#fff" stroke-width="4" opacity="0.5"/>
-    <circle cx="76" cy="76" r="10" fill="#fff" opacity="0.15"/>
-  </svg>`,
-  F: `
-  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="100" height="100" rx="24" fill="#fff"/>
-    <path d="M24 70 C32 50, 46 46, 60 56 C74 66, 86 62, 96 44"
-          stroke="#111" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.92"/>
-    <path d="M24 86 C38 72, 54 72, 70 80 C86 88, 96 82, 102 74"
-          stroke="#333" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.6"/>
-  </svg>`
-};
-
-function iconForKey(k){ return ICON_SVG[k] || ""; }
+/** ✅ 16 張圖「順序」對應（左到右、上到下） */
+const typeOrder = [
+  "BPCO","BPCF","BPDO","BPDF",
+  "BVCO","BVCF","BVDO","BVDF",
+  "TPCO","TPCF","TPDO","TPDF",
+  "TVCO","TVCF","TVDO","TVDF"
+];
 
 /** =========================
- *  防亂改 sig（SHA-256）
+ *  sig 防亂改（SHA-256）
  *  ========================= */
-
 function canonicalString(code, paramsObj) {
   return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
 }
@@ -409,47 +217,26 @@ async function sha256Hex(str) {
 }
 async function makeSig(code, pairs) {
   const hex = await sha256Hex(canonicalString(code, pairs));
-  return hex.slice(0, 16); // 64bits
+  return hex.slice(0, 16);
 }
 
 /** =========================
  *  小工具
  *  ========================= */
-function toast(text){
+function toast(text) {
   const t = document.getElementById("toast");
   t.textContent = text;
   t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 1200);
+  setTimeout(() => t.classList.remove("show"), 1200);
 }
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    toast("已複製 ✅");
-  }catch(e){
-    const ta=document.createElement("textarea");
-    ta.value=text;document.body.appendChild(ta);ta.select();
-    document.execCommand("copy");document.body.removeChild(ta);
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); toast("已複製 ✅"); }
+  catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
     toast("已複製 ✅");
   }
-}
-function showMsg(text){
-  const msg = document.getElementById("msg");
-  msg.style.display = "block";
-  msg.textContent = text;
-}
-function hideMsg(){
-  const msg = document.getElementById("msg");
-  msg.style.display = "none";
-  msg.textContent = "";
-}
-function encodePair(a,b){ return `${a}-${b}`; }
-function decodePair(str){
-  if (!/^\d-\d$/.test(str)) return null;
-  const [a,b]=str.split("-").map(n=>parseInt(n,10));
-  if ([a,b].some(n=>Number.isNaN(n)||n<0||n>5)) return null;
-  if (a+b!==5) return null;
-  if (a===b) return null;
-  return {a,b};
 }
 function flipHint(aKey, aScore, bKey, bScore) {
   const diff = Math.abs(aScore - bScore);
@@ -457,60 +244,65 @@ function flipHint(aKey, aScore, bKey, bScore) {
   const leader = aScore > bScore ? aKey : bKey;
   return `目前 ${leader} 領先｜差 ${need} 題翻盤`;
 }
+function encodePair(a, b) { return `${a}-${b}`; }
+function decodePair(str) {
+  if (!/^\d-\d$/.test(str)) return null;
+  const [a, b] = str.split("-").map(x => parseInt(x, 10));
+  if ([a,b].some(n => isNaN(n) || n < 0 || n > 5)) return null;
+  if (a + b !== 5) return null;
+  if (a === b) return null;
+  return { a, b };
+}
+function showMsg(t){
+  const msg=document.getElementById("msg");
+  msg.style.display="block"; msg.textContent=t;
+}
+function hideMsg(){
+  const msg=document.getElementById("msg");
+  msg.style.display="none"; msg.textContent="";
+}
+
+/** =========================
+ *  16圖 Sprite：依 code 設定背景位置
+ *  ========================= */
+function setSpriteForCode(code){
+  const el = document.getElementById("typeSprite");
+  const idx = typeOrder.indexOf(code);
+  if (idx < 0){ el.style.backgroundPosition = "0% 0%"; return; }
+  const col = idx % 4;           // 0..3
+  const row = Math.floor(idx/4); // 0..3
+  // 背景定位要用百分比：0, 33.333, 66.666, 100
+  const x = (col * 100) / 3;
+  const y = (row * 100) / 3;
+  el.style.backgroundPosition = `${x}% ${y}%`;
+}
 
 /** =========================
  *  UI Render
  *  ========================= */
-
-function renderQuiz(){
+function renderQuiz() {
   const root = document.getElementById("quiz");
   root.innerHTML = "";
 
-  dims.forEach((d, dimIndex)=>{
-    const sec=document.createElement("div");
-    sec.className="section";
-    sec.innerHTML = `
-      <div class="section-title">🧩 ${d.name}</div>
-      <div class="small">（此構面：${d.keyA} vs ${d.keyB}，共 5 題；不會平手）</div>
-    `;
+  dims.forEach((d, dimIndex) => {
+    const sec = document.createElement("div");
+    sec.className = "section";
+    sec.innerHTML = `<div class="section-title">🧩 ${d.name}</div><div class="small">（此構面：${d.keyA} vs ${d.keyB}，共 5 題）</div>`;
     root.appendChild(sec);
 
-    questions.map((q,idx)=>({q,idx}))
-      .filter(x=>x.q.dimIndex===dimIndex)
-      .forEach(({q,idx})=>{
+    questions
+      .map((q, idx) => ({ q, idx }))
+      .filter(x => x.q.dimIndex === dimIndex)
+      .forEach(({ q, idx }) => {
         const qId = `q${idx}`;
-        const div=document.createElement("div");
-        div.className="q";
-        div.id = `card-${idx}`;
+        const div = document.createElement("div");
+        div.className = "q";
         div.innerHTML = `
           <h3>${q.text}</h3>
-
-          <div class="opt-cards">
-            <div class="opt-card" data-q="${idx}" data-opt="A">
-              <div class="opt-ill">${iconForKey(q.aKey)}</div>
-              <div class="opt-meta">
-                <div class="opt-badge">A</div>
-                <div class="opt-text">${q.aText}</div>
-              </div>
-              <label class="opt-pick">
-                <input type="radio" name="${qId}" value="A" />
-                我選這個
-              </label>
-            </div>
-
-            <div class="opt-card" data-q="${idx}" data-opt="B">
-              <div class="opt-ill">${iconForKey(q.bKey)}</div>
-              <div class="opt-meta">
-                <div class="opt-badge">B</div>
-                <div class="opt-text">${q.bText}</div>
-              </div>
-              <label class="opt-pick">
-                <input type="radio" name="${qId}" value="B" />
-                我選這個
-              </label>
-            </div>
+          <div class="opt">
+            <label><input type="radio" name="${qId}" value="A" /> A. ${q.aText}</label>
+            <label><input type="radio" name="${qId}" value="B" /> B. ${q.bText}</label>
           </div>
-
           <div class="small">選 A → ${q.aKey} +1 ｜ 選 B → ${q.bKey} +1</div>
         `;
         root.appendChild(div);
@@ -518,69 +310,21 @@ function renderQuiz(){
   });
 }
 
-function getAnswers(){
-  return questions.map((_,i)=>document.querySelector(`input[name="q${i}"]:checked`)?.value||null);
-}
-
-function updateSelectedUI(qIndex){
-  const cards = document.querySelectorAll(`.opt-card[data-q="${qIndex}"]`);
-  cards.forEach(c=>c.classList.remove("selected"));
-  const checked = document.querySelector(`input[name="q${qIndex}"]:checked`);
-  if (!checked) return;
-  const chosen = document.querySelector(`.opt-card[data-q="${qIndex}"][data-opt="${checked.value}"]`);
-  if (chosen) chosen.classList.add("selected");
-}
-
-function refreshAllSelectedUI(){
-  questions.forEach((_,i)=>updateSelectedUI(i));
-}
-
-/** =========================
- *  進度 / 導航
- *  ========================= */
-function answeredCount(){
-  return getAnswers().filter(Boolean).length;
-}
-function updateProgressUI(){
-  const done = answeredCount();
-  const pct = Math.round((done / questions.length) * 100);
-  document.getElementById("progressFill").style.width = `${pct}%`;
-  document.getElementById("progressText").textContent = `${done} / ${questions.length}`;
-  document.getElementById("navMid").textContent =
-    done === questions.length ? "已完成所有題目 ✅ 可以計算結果了" : `目前完成 ${done}/20（點卡片作答）`;
-}
-
-function firstUnansweredIndex(){
-  const ans = getAnswers();
-  return ans.findIndex(v=>!v);
-}
-function currentFocusIndex(){
-  // 用目前 viewport 最靠上的題目卡推算「目前題」
-  const offsets = questions.map((_,i)=>{
-    const el = document.getElementById(`card-${i}`);
-    if (!el) return {i, top: 1e9};
-    const r = el.getBoundingClientRect();
-    return {i, top: Math.abs(r.top - 140)};
-  });
-  offsets.sort((a,b)=>a.top-b.top);
-  return offsets[0]?.i ?? 0;
-}
-function scrollToQuestion(i){
-  const el = document.getElementById(`card-${i}`);
-  if (!el) return;
-  el.scrollIntoView({behavior:"smooth", block:"start"});
+function getAnswers() {
+  return questions.map((_, i) =>
+    document.querySelector(`input[name="q${i}"]:checked`)?.value || null
+  );
 }
 
 /** =========================
  *  計算 / 顯示 / 分享
  *  ========================= */
+function computeFromAnswers(answers) {
+  const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
 
-function computeFromAnswers(answers){
-  const score = { B:0,T:0,P:0,V:0,C:0,D:0,O:0,F:0 };
-
-  answers.forEach((ans,i)=>{
+  answers.forEach((ans, i) => {
     const q = questions[i];
-    const key = (ans==="A") ? q.aKey : q.bKey;
+    const key = (ans === "A") ? q.aKey : q.bKey;
     score[key] += 1;
   });
 
@@ -588,47 +332,54 @@ function computeFromAnswers(answers){
   const code = letters.join("");
 
   const pairs = {};
-  dims.forEach(d => pairs[d.param] = encodePair(score[d.keyA], score[d.keyB]));
-  return {score, code, pairs};
+  dims.forEach(d => {
+    pairs[d.param] = encodePair(score[d.keyA], score[d.keyB]);
+  });
+
+  return { score, code, pairs };
 }
 
-async function setShareParamsWithSig({code, pairs}){
+async function setShareParamsWithSig({code, pairs}) {
   const sig = await makeSig(code, pairs);
   const url = new URL(window.location.href);
   url.searchParams.set("r", code);
-  dims.forEach(d=>url.searchParams.set(d.param, pairs[d.param]));
+  dims.forEach(d => url.searchParams.set(d.param, pairs[d.param]));
   url.searchParams.set("sig", sig);
   window.history.replaceState({}, "", url.toString());
 }
 
-function renderResult({score, code}){
-  const info = typeMap[code] || { title: "未定義結果", trait: ["請補上 typeMap 對照"], quote:"" };
+function renderResult({score, code}) {
+  const info = typeMap[code] || { title: "未定義結果", trait: ["請補上 typeMap 對照"], quote: "" };
 
   document.getElementById("code").textContent = code;
   document.getElementById("typeTitle").textContent = info.title;
 
+  setSpriteForCode(code); // ✅ 顯示對應那張結果圖
+
   const traitHTML = Array.isArray(info.trait)
-    ? `<ul>${info.trait.map(t=>`<li>${t}</li>`).join("")}</ul>`
+    ? `<ul>${info.trait.map(t => `<li>${t}</li>`).join("")}</ul>`
     : `<div>${info.trait}</div>`;
   document.getElementById("typeTrait").innerHTML = traitHTML;
+
   document.getElementById("typeQuote").textContent = info.quote || "";
 
   const scoresBox = document.getElementById("scores");
   scoresBox.innerHTML = "";
-  dims.forEach(d=>{
+
+  dims.forEach(d => {
     const a = score[d.keyA];
     const b = score[d.keyB];
-    const winner = a>b ? d.keyA : d.keyB;
+    const winner = a > b ? d.keyA : d.keyB;
 
     const card = document.createElement("div");
     card.className = "score-line";
     card.innerHTML = `
       <div style="font-weight:900;">${d.name}</div>
-      <div class="two" style="margin-top:6px;">
+      <div class="two">
         <div>${d.keyA}：<span class="mono">${a}</span></div>
         <div>${d.keyB}：<span class="mono">${b}</span></div>
       </div>
-      <div class="small" style="margin-top:6px;">
+      <div class="small">
         結果：<b>${winner}</b> ｜ <span class="mono">${d.keyA} ${a} / ${d.keyB} ${b}</span> ｜ ${flipHint(d.keyA, a, d.keyB, b)}
       </div>
       <div class="bar" title="${d.keyA} vs ${d.keyB}">
@@ -642,18 +393,18 @@ function renderResult({score, code}){
   document.getElementById("result").style.display = "block";
 }
 
-function buildResultCardText({score, code}){
-  const info = typeMap[code] || { title:"未定義結果", trait:[], quote:"" };
+function buildResultCardText({score, code}) {
+  const info = typeMap[code] || { title: "未定義結果", trait: [], quote: "" };
   const url = window.location.href;
 
-  const dimLines = dims.map(d=>{
-    const a=score[d.keyA], b=score[d.keyB];
-    const winner=a>b?d.keyA:d.keyB;
-    return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA,a,d.keyB,b)}）`;
+  const dimLines = dims.map(d => {
+    const a = score[d.keyA], b = score[d.keyB];
+    const winner = a > b ? d.keyA : d.keyB;
+    return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA, a, d.keyB, b)}）`;
   }).join("\n");
 
   const traits = Array.isArray(info.trait) && info.trait.length
-    ? info.trait.map(t=>`- ${t}`).join("\n")
+    ? info.trait.map(t => `- ${t}`).join("\n")
     : "";
 
   return [
@@ -667,149 +418,40 @@ function buildResultCardText({score, code}){
   ].filter(Boolean).join("\n");
 }
 
-async function calcFromUI(){
-  hideMsg();
-  const answers = getAnswers();
-  const missing = answers.map((v,i)=>v?null:i+1).filter(Boolean);
-  if (missing.length){
-    showMsg(`你還有 ${missing.length} 題未作答：第 ${missing.join(", ")} 題`);
-    const first = firstUnansweredIndex();
-    if (first >= 0) scrollToQuestion(first);
-    return;
-  }
-
-  const computed = computeFromAnswers(answers);
-  await setShareParamsWithSig({code: computed.code, pairs: computed.pairs});
-  renderResult({score: computed.score, code: computed.code});
-
-  // 統計：送出 + 讀取（可選）
-  await maybeHandleStats(computed);
-
-  document.getElementById("result").scrollIntoView({behavior:"smooth"});
-}
-
-function resetAll(){
-  document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);
-  refreshAllSelectedUI();
-  updateProgressUI();
-  hideMsg();
-
-  document.getElementById("result").style.display="none";
-
-  const url = new URL(window.location.href);
-  ["r","sig",...dims.map(d=>d.param)].forEach(k=>url.searchParams.delete(k));
-  window.history.replaceState({}, "", url.toString());
-
-  document.getElementById("topHint").innerHTML =
-    `作答方式：每題選一個選項；該選項對應的字母 +1。<br/>
-     結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br/>
-     分享方式：網址會帶上 <span class="mono">r / bt / pv / cd / of / sig</span>（含真實分數 + 防手改驗證）。`;
-
-  // 隱藏統計區
-  document.getElementById("statsBox").style.display="none";
-
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
 /** =========================
- *  分享連結讀取（含 sig）
+ *  ✅ 統計：送出 + 讀取 + 顯示
  *  ========================= */
-
-async function showResultFromParamsIfAny(){
-  const url = new URL(window.location.href);
-  const r = (url.searchParams.get("r")||"").toUpperCase().trim();
-  if (!r) return;
-
-  const codeOk = /^[BT][PV][CD][OF]$/.test(r) && typeMap[r];
-  if (!codeOk) return;
-
-  const sig = (url.searchParams.get("sig")||"").trim();
-  if (!sig){
-    showMsg("此分享連結缺少驗證碼（sig），可能已被修改或版本過舊。");
-    return;
-  }
-
-  const pairs = {};
-  const score = {B:0,T:0,P:0,V:0,C:0,D:0,O:0,F:0};
-
-  for (const d of dims){
-    const raw = (url.searchParams.get(d.param)||"").trim();
-    const pair = decodePair(raw);
-    if (!pair){
-      showMsg("此分享連結的分數參數不完整或不合法（需為 5 題制，例如 4-1）。");
-      return;
-    }
-    pairs[d.param] = raw;
-    score[d.keyA] = pair.a;
-    score[d.keyB] = pair.b;
-
-    // winner 必須與 r 一致
-    const winner = (pair.a > pair.b) ? d.keyA : d.keyB;
-    const expected = r[dims.indexOf(d)];
-    if (winner !== expected){
-      showMsg("分享連結的 r 與分數勝負不一致，可能被手動修改。");
-      return;
-    }
-  }
-
-  const expectedSig = await makeSig(r, pairs);
-  if (expectedSig !== sig){
-    showMsg("此分享連結已被修改（sig 驗證失敗）。請重新產生分享連結。");
-    return;
-  }
-
-  document.getElementById("topHint").innerHTML =
-    `你正在查看分享結果：<span class="mono">${r}</span>（此連結包含真實分數，且已通過驗證）`;
-
-  renderResult({score, code: r});
-
-  // 統計：僅讀取（不重複送出也可；這裡保守：不自動送出）
-  await maybeLoadStatsOnly(r);
-
-  document.getElementById("result").scrollIntoView({behavior:"smooth"});
-}
-
-/** =========================
- *  統計（可選：Google Sheets / Apps Script）
- *  ========================= */
-
-async function sendStats({code, pairs}){
+async function sendStatsRecord(payload){
   if (!STATS_ENDPOINT) return;
   try{
     await fetch(STATS_ENDPOINT, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        type: code,
-        r: code,
-        bt: pairs.bt, pv: pairs.pv, cd: pairs.cd, of: pairs.of,
-        ua: navigator.userAgent
-      })
+      body: JSON.stringify(payload)
     });
   }catch(e){}
 }
-
-async function loadStats(){
+async function loadStatsCounts(){
   if (!STATS_ENDPOINT) return null;
   try{
-    const res = await fetch(STATS_ENDPOINT, {method:"GET"});
+    const res = await fetch(STATS_ENDPOINT);
     const data = await res.json();
-    return data?.counts ? data.counts : {};
+    return data && data.counts ? data.counts : {};
   }catch(e){
     return null;
   }
 }
-
 function renderStatsUI(counts, myCode){
   if (!counts) return;
+
   const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const total = entries.reduce((s, [,v])=>s+v, 0);
+  const total = entries.reduce((s,[,v])=>s+v,0);
   const mine = counts[myCode] || 0;
 
   document.getElementById("statsBox").style.display = "block";
   document.getElementById("statsHint").textContent =
     STATS_ENDPOINT ? "（此統計為全體作答者彙總，刷新頁面可更新）" : "（未設定統計端點）";
-  document.getElementById("statsTotal").textContent = total ? `${total}` : "0";
+  document.getElementById("statsTotal").textContent = `${total}`;
   document.getElementById("statsMine").textContent = `${myCode}：${mine}`;
 
   const rankBox = document.getElementById("statsRank");
@@ -827,129 +469,172 @@ function renderStatsUI(counts, myCode){
   });
 }
 
-async function maybeHandleStats(computed){
-  if (!STATS_ENDPOINT) return;
-  await sendStats({code: computed.code, pairs: computed.pairs});
-  const counts = await loadStats();
-  if (counts) renderStatsUI(counts, computed.code);
+/** =========================
+ *  主流程
+ *  ========================= */
+async function calcFromUI() {
+  hideMsg();
+
+  const answers = getAnswers();
+  const missing = answers.map((v, i) => v ? null : i + 1).filter(Boolean);
+  if (missing.length) {
+    showMsg(`你還有 ${missing.length} 題未作答：第 ${missing.join(", ")} 題`);
+    return;
+  }
+
+  const computed = computeFromAnswers(answers);
+  await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });
+  renderResult({ score: computed.score, code: computed.code });
+
+  // ✅ 統計：送出本次結果，再抓回統計顯示
+  if (STATS_ENDPOINT){
+    await sendStatsRecord({
+      type: computed.code,
+      r: computed.code,
+      bt: computed.pairs.bt,
+      pv: computed.pairs.pv,
+      cd: computed.pairs.cd,
+      of: computed.pairs.of,
+      ua: navigator.userAgent
+    });
+    const counts = await loadStatsCounts();
+    if (counts) renderStatsUI(counts, computed.code);
+  }
+
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
 }
 
-async function maybeLoadStatsOnly(code){
-  if (!STATS_ENDPOINT) return;
-  const counts = await loadStats();
-  if (counts) renderStatsUI(counts, code);
+function resetAll() {
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.getElementById("result").style.display = "none";
+  hideMsg();
+
+  const url = new URL(window.location.href);
+  ["r","sig", ...dims.map(d => d.param)].forEach(k => url.searchParams.delete(k));
+  window.history.replaceState({}, "", url.toString());
+
+  document.getElementById("mainActions").style.display = "";
+  document.getElementById("topHint").innerHTML =
+    `作答方式：每題選一個選項；該選項對應的字母 +1。<br/>
+     結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br/>
+     分享連結會包含真實分數與 sig 驗證，避免被亂改。`;
+
+  document.getElementById("statsBox").style.display="none";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /** =========================
- *  事件：選卡片、更新 UI
+ *  讀取分享連結（含 sig + 真實分數）
  *  ========================= */
+async function showResultFromParamsIfAny() {
+  const url = new URL(window.location.href);
+  const r = (url.searchParams.get("r") || "").toUpperCase().trim();
+  if (!r) return;
 
-document.getElementById("quiz").addEventListener("click", (e)=>{
-  const card = e.target.closest(".opt-card");
-  if (!card) return;
+  const codeOk = /^[BT][PV][CD][OF]$/.test(r) && typeMap[r];
+  if (!codeOk) return;
 
-  const qIndex = parseInt(card.dataset.q, 10);
-  const opt = card.dataset.opt; // A / B
-  const radio = card.querySelector(`input[type="radio"][value="${opt}"]`);
-  if (radio){
-    radio.checked = true;
-    updateSelectedUI(qIndex);
-    updateProgressUI();
+  const sig = (url.searchParams.get("sig") || "").trim();
+  if (!sig) { showMsg("此分享連結缺少驗證碼（sig），可能已被修改或版本過舊。"); return; }
 
-    // 選完自動導到下一題（更順）
-    const next = qIndex + 1;
-    if (next < questions.length){
-      setTimeout(()=>scrollToQuestion(next), 120);
-    }
+  const pairs = {};
+  const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
+
+  for (const d of dims) {
+    const raw = (url.searchParams.get(d.param) || "").trim();
+    const pair = decodePair(raw);
+    if (!pair) { showMsg("此分享連結的分數參數不完整或不合法（需為 5 題制，例如 4-1）。"); return; }
+    pairs[d.param] = raw;
+    score[d.keyA] = pair.a;
+    score[d.keyB] = pair.b;
+
+    const winner = (pair.a > pair.b) ? d.keyA : d.keyB;
+    const expected = r[dims.indexOf(d)];
+    if (winner !== expected) { showMsg("分享連結的 r 與分數勝負不一致，可能被手動修改。"); return; }
   }
-});
+
+  const expectedSig = await makeSig(r, pairs);
+  if (expectedSig !== sig) { showMsg("此分享連結已被修改（sig 驗證失敗）。請重新產生分享連結。"); return; }
+
+  document.getElementById("topHint").innerHTML =
+    `你正在查看分享結果：<span class="mono">${r}</span>（此連結包含真實分數，且已通過驗證）`;
+  document.getElementById("mainActions").style.display = "none";
+
+  renderResult({ score, code: r });
+
+  // ✅ 分享頁也可以顯示統計（只讀，不強制送出）
+  if (STATS_ENDPOINT){
+    const counts = await loadStatsCounts();
+    if (counts) renderStatsUI(counts, r);
+  }
+
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+/** =========================
+ *  初始化
+ *  ========================= */
+renderQuiz();
+showResultFromParamsIfAny();
 
 document.getElementById("btnCalc").addEventListener("click", calcFromUI);
 document.getElementById("btnReset").addEventListener("click", resetAll);
 
-document.getElementById("btnPrev").addEventListener("click", ()=>{
-  const cur = currentFocusIndex();
-  const prev = Math.max(0, cur - 1);
-  scrollToQuestion(prev);
-});
-document.getElementById("btnNext").addEventListener("click", ()=>{
-  const cur = currentFocusIndex();
-  const next = Math.min(questions.length - 1, cur + 1);
-  scrollToQuestion(next);
-});
-
-document.getElementById("btnCopyLink").addEventListener("click", ()=>{
+document.getElementById("btnCopyLink").addEventListener("click", async () => {
+  hideMsg();
   const url = new URL(window.location.href);
   const hasR = url.searchParams.get("r");
   const hasSig = url.searchParams.get("sig");
-  if (!hasR || !hasSig){
-    showMsg("請先完成 20 題並按「計算結果」，才會產生可分享的連結（含 sig）。");
-    return;
-  }
+  if (!hasR || !hasSig) { showMsg("請先完成 20 題並按「計算結果」，才會產生可分享的連結（含 sig）。"); return; }
   copyText(window.location.href);
 });
 
-document.getElementById("btnCopyCard").addEventListener("click", async ()=>{
+document.getElementById("btnCopyCard").addEventListener("click", async () => {
   hideMsg();
   const url = new URL(window.location.href);
-  const r = (url.searchParams.get("r")||"").toUpperCase().trim();
-  const sig = (url.searchParams.get("sig")||"").trim();
+  const r = (url.searchParams.get("r") || "").toUpperCase().trim();
+  const sig = (url.searchParams.get("sig") || "").trim();
 
-  // 若 URL 有完整參數：先驗 sig 再複製（避免複製到被改過的連結）
-  if (r && typeMap[r] && sig){
+  if (r && typeMap[r] && sig) {
     const pairs = {};
-    const score = {B:0,T:0,P:0,V:0,C:0,D:0,O:0,F:0};
+    const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
 
-    for (const d of dims){
-      const raw = (url.searchParams.get(d.param)||"").trim();
+    for (const d of dims) {
+      const raw = (url.searchParams.get(d.param) || "").trim();
       const pair = decodePair(raw);
-      if (!pair){
-        showMsg("目前網址缺少完整分數參數，請重新計算結果後再複製結果卡。");
-        return;
-      }
+      if (!pair) { showMsg("目前網址缺少完整分數參數，請重新計算結果後再複製結果卡。"); return; }
       pairs[d.param] = raw;
       score[d.keyA] = pair.a;
       score[d.keyB] = pair.b;
     }
 
     const expectedSig = await makeSig(r, pairs);
-    if (expectedSig !== sig){
-      showMsg("目前網址的 sig 驗證失敗（可能被改過）。請重新計算結果產生新連結。");
-      return;
-    }
+    if (expectedSig !== sig) { showMsg("目前網址的 sig 驗證失敗（可能被改過）。請重新計算結果產生新連結。"); return; }
 
-    copyText(buildResultCardText({score, code:r}));
+    copyText(buildResultCardText({ score, code: r }));
     return;
   }
 
-  // 否則：用作答重算
   const answers = getAnswers();
-  if (answers.some(v=>!v)){
-    showMsg("要複製結果卡前，請先完成 20 題並計算結果。");
-    return;
-  }
+  if (answers.some(v => !v)) { showMsg("要複製結果卡前，請先完成 20 題並計算結果。"); return; }
+
   const computed = computeFromAnswers(answers);
-  await setShareParamsWithSig({code: computed.code, pairs: computed.pairs});
-  renderResult({score: computed.score, code: computed.code});
-  await maybeHandleStats(computed);
-  copyText(buildResultCardText({score: computed.score, code: computed.code}));
+  await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });
+  renderResult({ score: computed.score, code: computed.code });
+
+  if (STATS_ENDPOINT){
+    await sendStatsRecord({
+      type: computed.code, r: computed.code,
+      bt: computed.pairs.bt, pv: computed.pairs.pv, cd: computed.pairs.cd, of: computed.pairs.of,
+      ua: navigator.userAgent
+    });
+    const counts = await loadStatsCounts();
+    if (counts) renderStatsUI(counts, computed.code);
+  }
+
+  copyText(buildResultCardText({ score: computed.score, code: computed.code }));
 });
-
-document.getElementById("btnBackToQuiz").addEventListener("click", ()=>{
-  document.getElementById("result").style.display = "none";
-  const first = firstUnansweredIndex();
-  scrollToQuestion(first >= 0 ? first : 0);
-});
-
-/** =========================
- *  初始化
- *  ========================= */
-
-renderQuiz();
-refreshAllSelectedUI();
-updateProgressUI();
-showResultFromParamsIfAny();
 </script>
 </body>
 </html>
-
