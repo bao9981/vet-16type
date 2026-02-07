@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>獸醫 16 型人格測驗</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", Arial, sans-serif; margin: 24px; line-height: 1.6; }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    .hint { color: #555; margin-bottom: 16px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .q { border: 1px solid #ddd; border-radius: 12px; padding: 14px 14px 10px; }
+    .q h3 { margin: 0 0 10px; font-size: 16px; }
+    .opt { display: flex; gap: 14px; flex-wrap: wrap; }
+    label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+    .small { font-size: 13px; color: #666; }
+    .section { margin: 18px 0 10px; padding: 10px 12px; border-radius: 12px; background: #fafafa; border: 1px solid #eee; }
+    .section-title { font-weight: 700; }
+    .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    button { padding: 10px 14px; border-radius: 12px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+    button.primary { border-color: #111; background: #111; color: #fff; }
+    .warn { color: #b00020; margin-top: 10px; display:none; }
+    .result { margin-top: 22px; padding: 16px; border: 1px solid #ddd; border-radius: 14px; background: #fafafa; display:none; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .tag { display:inline-block; padding: 2px 10px; border: 1px solid #ddd; border-radius: 999px; margin-left: 8px; font-size: 12px; color:#444; background:#fff; }
+    .type-title { font-size: 20px; font-weight: 800; margin: 6px 0 10px; }
+    ul { margin: 8px 0 0 20px; }
+    .scores { display:grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    .score-line { padding: 10px 12px; border-radius: 12px; border: 1px solid #e6e6e6; background:#fff; }
+    .bar { height: 10px; background: #eee; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .bar > div { height: 100%; width: 50%; background: #bbb; }
+    .two { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .result-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background:#111; color:#fff; padding:10px 12px; border-radius: 999px; font-size: 13px; opacity:0; pointer-events:none; transition: opacity .2s; }
+    .toast.show { opacity:1; }
+    @media (max-width: 740px) { .two { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>獸醫 16 型人格測驗 <span class="tag">20 題｜4 構面｜二選一</span></h1>
+  <div class="hint" id="topHint">
+    作答方式：每題選一個選項；該選項對應的字母 +1。<br/>
+    結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。
+  </div>
+
+  <div id="quiz" class="grid"></div>
+
+  <div class="actions" id="mainActions">
+    <button class="primary" id="btnCalc">計算結果</button>
+    <button id="btnReset">重填</button>
+  </div>
+
+  <div id="msg" class="warn"></div>
+
+  <div id="result" class="result">
+    <div>你的四字母：<span class="mono" id="code"></span></div>
+    <div class="type-title" id="typeTitle"></div>
+    <div id="typeTrait"></div>
+    <div style="margin-top:10px;"><b>代表句：</b><span id="typeQuote"></span></div>
+
+    <div class="result-actions">
+      <button id="btnCopyLink">複製分享連結</button>
+      <button class="primary" id="btnCopyCard">複製結果卡</button>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #e5e5e5;margin:16px 0;" />
+
+    <div style="font-weight:700;margin-bottom:8px;">各構面分數（含翻盤提示）</div>
+    <div id="scores" class="scores"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast">已複製</div>
+
+<script>
+/** =========================
+ *  資料區：題目與結果
+ *  ========================= */
+
+const dims = [
+  { keyA: "B", keyB: "T", name: "社交能量（B / T）", param: "bt" },
+  { keyA: "P", keyB: "V", name: "工作風格（P / V）", param: "pv" },
+  { keyA: "C", keyB: "D", name: "決策模式（C / D）", param: "cd" },
+  { keyA: "O", keyB: "F", name: "應變節奏（O / F）", param: "of" },
+];
+
+const questions = [
+  { dimIndex: 0, text: "Q1｜忙到爆炸的一天結束後，你比較想：", aText: "跟同事一起抱怨＋取暖（B）", bText: "立刻進入省電模式（T）", aKey:"B", bKey:"T" },
+  { dimIndex: 0, text: "Q2｜休息時間你通常：", aText: "找人一起吃飯聊天（B）", bText: "一個人滑手機更舒服（T）", aKey:"B", bKey:"T" },
+  { dimIndex: 0, text: "Q3｜遇到新來的實習生時你：", aText: "立刻變成熱心前輩（B）", bText: "默默觀察再決定要不要說話（T）", aKey:"B", bKey:"T" },
+  { dimIndex: 0, text: "Q4｜開會時你比較：", aText: "會忍不住插話補充（B）", bText: "只在必要時發言（T）", aKey:"B", bKey:"T" },
+  { dimIndex: 0, text: "Q5｜同事約下班聚餐你通常：", aText: "只要不是太累就去（B）", bText: "心裡先想「我只想趕快回家...」（T）", aKey:"B", bKey:"T" },
+
+  { dimIndex: 1, text: "Q6｜面對病例時你比較像：", aText: "SOP 就是我的安全感（P）", bText: "先靠直覺再慢慢驗證（V）", aKey:"P", bKey:"V" },
+  { dimIndex: 1, text: "Q7｜學新進的儀器時你：", aText: "一定要有操作步驟表（P）", bText: "摸一摸就大概懂了（V）", aKey:"P", bKey:"V" },
+  { dimIndex: 1, text: "Q8｜正在打病歷時你：", aText: "格式一定要整齊漂亮（P）", bText: "重點寫到就好（V）", aKey:"P", bKey:"V" },
+  { dimIndex: 1, text: "Q9｜遇到複雜狀況你：", aText: "先翻紀錄或是 Paper 找依據（P）", bText: "先想可能性再說（V）", aKey:"P", bKey:"V" },
+  { dimIndex: 1, text: "Q10｜你比較擅長：", aText: "把例行工作做得很穩（P）", bText: "處理突發奇怪案件（V）", aKey:"P", bKey:"V" },
+
+  { dimIndex: 2, text: "Q11｜遇到醫療糾紛時你先想：", aText: "是否是專業的問題，對錯在哪（C）", bText: "主人現在的情緒很緊繃，我要怎麼安撫主人（D）", aKey:"C", bKey:"D" },
+  { dimIndex: 2, text: "Q12｜同事出包時你會：", aText: "先講重點怎麼修正（C）", bText: "先說「沒事沒事」（D）", aKey:"C", bKey:"D" },
+  { dimIndex: 2, text: "Q13｜安撫主人你比較像：", aText: "說明風險與數據（C）", bText: "用語氣跟態度安撫（D）", aKey:"C", bKey:"D" },
+  { dimIndex: 2, text: "Q14｜做決定時你：", aText: "用腦袋分析（C）", bText: "用心感覺（D）", aKey:"C", bKey:"D" },
+  { dimIndex: 2, text: "Q15｜你更在意：", aText: "把事情做對（C）", bText: "不要傷感情（D）", aKey:"C", bKey:"D" },
+
+  { dimIndex: 3, text: "Q16｜班表被臨時更動時你：", aText: "內心會小崩潰（O）", bText: "覺得「好喔 OK」（F）", aKey:"O", bKey:"F" },
+  { dimIndex: 3, text: "Q17｜每天工作你偏好：", aText: "先排好順序再做（O）", bText: "來上班之後，有什麼做什麼（F）", aKey:"O", bKey:"F" },
+  { dimIndex: 3, text: "Q18｜補病歷時你通常：", aText: "當天一定清完（O）", bText: "相信明天的我會處理（F）", aKey:"O", bKey:"F" },
+  { dimIndex: 3, text: "Q19｜遇到超時掛號的你：", aText: "心裡 OS 很多（O）", bText: "直接接就對了（F）", aKey:"O", bKey:"F" },
+  { dimIndex: 3, text: "Q20｜臨時有同事請假需要支援時你：", aText: "會希望提前知道與安排（O）", bText: "現場需要就直接上，有錢不賺，王八蛋（F）", aKey:"O", bKey:"F" },
+];
+
+const typeMap = {
+  "BPCO": { title: "🐶【德國牧羊犬型獸醫】", trait: ["紀律支柱型","外向可靠","重流程、講效率","團隊核心人物"], quote: "「交給我，我處理。」" },
+  "BPCF": { title: "🐕【米格魯型獸醫】", trait: ["活力執行者","熱心又務實","做事有效率"], quote: "「邊做邊調整！」" },
+  "BPDO": { title: "🐕【黃金獵犬型獸醫】", trait: ["暖心行動派","熱情又負責","病主最安心"], quote: "「我懂你，我來幫忙。」" },
+  "BPDF": { title: "🐕【柯基型獸醫】", trait: ["親切實務型","可愛又好相處","做事接地氣"], quote: "「沒事的～慢慢來。」" },
+  "BVCO": { title: "🐱【孟加拉貓型獸醫】", trait: ["策略領導型","直覺強","善於規劃"], quote: "「讓我想一下全局。」" },
+  "BVCF": { title: "🐱【豹貓型獸醫】", trait: ["機動救火隊","靈活又理性"], quote: "「突發？我OK。」" },
+  "BVDO": { title: "🐶【邊境牧羊犬型】", trait: ["熱血領隊型","有想法又貼心"], quote: "「我們一起搞定！」" },
+  "BVDF": { title: "🐶【柴犬型獸醫】", trait: ["氣氛王者","團隊開心果"], quote: "「我來，我來！」" },
+  "TPCO": { title: "🐱【英國短毛貓型】", trait: ["冷靜專業派","穩定可靠"], quote: "「先按 SOP 走。」" },
+  "TPCF": { title: "🐱【俄羅斯藍貓型】", trait: ["低調效率型","安靜但強"], quote: "「默默把事做好。」" },
+  "TPDO": { title: "🐶【法鬥型獸醫】", trait: ["溫和實幹派"], quote: "「一步一步來。」" },
+  "TPDF": { title: "🐱【布偶貓型獸醫】", trait: ["佛系暖心型"], quote: "「大家都辛苦了。」" },
+  "TVCO": { title: "🐱【挪威森林貓型】", trait: ["分析策略型"], quote: "「我先研究一下。」" },
+  "TVCF": { title: "🐱【暹羅貓型】", trait: ["冷靜彈性型"], quote: "「隨機應變。」" },
+  "TVDO": { title: "🐶【拉布拉多型】", trait: ["內斂領導者"], quote: "「穩穩地做就好。」" },
+  "TVDF": { title: "🐶【薩摩耶型】", trait: ["溫柔智者型"], quote: "「沒事，我陪你。」" },
+};
+
+/** =========================
+ *  防亂改：sig（用 WebCrypto SHA-256）
+ *  ========================= */
+
+// 你可以改這個 SALT（像密碼一樣），別人就更難「照抄算簽名」
+const SIG_SALT = "vet-16type-v1::change-me";
+
+function canonicalString(code, paramsObj) {
+  // 固定順序組字串，避免參數順序不同導致簽名不同
+  return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
+}
+
+async function sha256Hex(str) {
+  const enc = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function makeSig(code, pairs) {
+  const canon = canonicalString(code, pairs);
+  const hex = await sha256Hex(canon);
+  // 取短一點就好（仍足夠防手改），16 個 hex = 64bits
+  return hex.slice(0, 16);
+}
+
+/** =========================
+ *  工具
+ *  ========================= */
+
+function toast(text) {
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1200);
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("已複製 ✅");
+  } catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    toast("已複製 ✅");
+  }
+}
+
+function flipHint(aKey, aScore, bKey, bScore) {
+  const diff = Math.abs(aScore - bScore);
+  const need = Math.floor(diff / 2) + 1;
+  const leader = aScore > bScore ? aKey : bKey;
+  return `目前 ${leader} 領先｜差 ${need} 題翻盤`;
+}
+
+function encodePair(a, b) { return `${a}-${b}`; }
+function decodePair(str) {
+  if (!/^\d-\d$/.test(str)) return null;
+  const [a, b] = str.split("-").map(x => parseInt(x, 10));
+  if ([a,b].some(n => isNaN(n) || n < 0 || n > 5)) return null;
+  if (a + b !== 5) return null;
+  if (a === b) return null;
+  return { a, b };
+}
+
+/** =========================
+ *  UI Render
+ *  ========================= */
+
+function renderQuiz() {
+  const root = document.getElementById("quiz");
+  root.innerHTML = "";
+
+  dims.forEach((d, dimIndex) => {
+    const sec = document.createElement("div");
+    sec.className = "section";
+    sec.innerHTML = `<div class="section-title">🧩 ${d.name}</div><div class="small">（此構面：${d.keyA} vs ${d.keyB}，共 5 題）</div>`;
+    root.appendChild(sec);
+
+    questions
+      .map((q, idx) => ({ q, idx }))
+      .filter(x => x.q.dimIndex === dimIndex)
+      .forEach(({ q, idx }) => {
+        const qId = `q${idx}`;
+        const div = document.createElement("div");
+        div.className = "q";
+        div.innerHTML = `
+          <h3>${q.text}</h3>
+          <div class="opt">
+            <label><input type="radio" name="${qId}" value="A" /> A. ${q.aText}</label>
+            <label><input type="radio" name="${qId}" value="B" /> B. ${q.bText}</label>
+          </div>
+          <div class="small">選 A → ${q.aKey} +1 ｜ 選 B → ${q.bKey} +1</div>
+        `;
+        root.appendChild(div);
+      });
+  });
+}
+
+function getAnswers() {
+  return questions.map((_, i) =>
+    document.querySelector(`input[name="q${i}"]:checked`)?.value || null
+  );
+}
+
+/** =========================
+ *  計算 / 顯示 / 分享
+ *  ========================= */
+
+function computeFromAnswers(answers) {
+  const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
+
+  answers.forEach((ans, i) => {
+    const q = questions[i];
+    const key = (ans === "A") ? q.aKey : q.bKey;
+    score[key] += 1;
+  });
+
+  const letters = dims.map(d => (score[d.keyA] > score[d.keyB]) ? d.keyA : d.keyB);
+  const code = letters.join("");
+
+  const pairs = {};
+  dims.forEach(d => {
+    pairs[d.param] = encodePair(score[d.keyA], score[d.keyB]);
+  });
+
+  return { score, code, pairs };
+}
+
+async function setShareParamsWithSig({code, pairs}) {
+  const sig = await makeSig(code, pairs);
+  const url = new URL(window.location.href);
+  url.searchParams.set("r", code);
+  dims.forEach(d => url.searchParams.set(d.param, pairs[d.param]));
+  url.searchParams.set("sig", sig);
+  window.history.replaceState({}, "", url.toString());
+}
+
+function renderResult({score, code}) {
+  const info = typeMap[code] || { title: "未定義結果", trait: ["請補上 typeMap 對照"], quote: "" };
+
+  document.getElementById("code").textContent = code;
+  document.getElementById("typeTitle").textContent = info.title;
+
+  const traitHTML = Array.isArray(info.trait)
+    ? `<ul>${info.trait.map(t => `<li>${t}</li>`).join("")}</ul>`
+    : `<div>${info.trait}</div>`;
+  document.getElementById("typeTrait").innerHTML = traitHTML;
+
+  document.getElementById("typeQuote").textContent = info.quote || "";
+
+  const scoresBox = document.getElementById("scores");
+  scoresBox.innerHTML = "";
+
+  dims.forEach(d => {
+    const a = score[d.keyA];
+    const b = score[d.keyB];
+    const winner = a > b ? d.keyA : d.keyB;
+
+    const card = document.createElement("div");
+    card.className = "score-line";
+    card.innerHTML = `
+      <div style="font-weight:700;">${d.name}</div>
+      <div class="two">
+        <div>${d.keyA}：<span class="mono">${a}</span></div>
+        <div>${d.keyB}：<span class="mono">${b}</span></div>
+      </div>
+      <div class="small">
+        結果：<b>${winner}</b> ｜ <span class="mono">${d.keyA} ${a} / ${d.keyB} ${b}</span> ｜ ${flipHint(d.keyA, a, d.keyB, b)}
+      </div>
+      <div class="bar" title="${d.keyA} vs ${d.keyB}">
+        <div style="width:${(a/5)*100}%"></div>
+      </div>
+      <div class="small">長條為 ${d.keyA} 佔比（0~5）</div>
+    `;
+    scoresBox.appendChild(card);
+  });
+
+  document.getElementById("result").style.display = "block";
+}
+
+function buildResultCardText({score, code}) {
+  const info = typeMap[code] || { title: "未定義結果", trait: [], quote: "" };
+  const url = window.location.href;
+
+  const dimLines = dims.map(d => {
+    const a = score[d.keyA], b = score[d.keyB];
+    const winner = a > b ? d.keyA : d.keyB;
+    return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA, a, d.keyB, b)}）`;
+  }).join("\n");
+
+  const traits = Array.isArray(info.trait) && info.trait.length
+    ? info.trait.map(t => `- ${t}`).join("\n")
+    : "";
+
+  return [
+    `【獸醫 16 型人格測驗結果】`,
+    `四字母：${code}`,
+    `${info.title}`,
+    traits ? `\n特質：\n${traits}` : "",
+    info.quote ? `\n代表句：${info.quote}` : "",
+    `\n構面分數：\n${dimLines}`,
+    `\n分享連結：${url}`
+  ].filter(Boolean).join("\n");
+}
+
+async function calcFromUI() {
+  const msg = document.getElementById("msg");
+  msg.style.display = "none";
+  msg.textContent = "";
+
+  const answers = getAnswers();
+  const missing = answers.map((v, i) => v ? null : i + 1).filter(Boolean);
+  if (missing.length) {
+    msg.style.display = "block";
+    msg.textContent = `你還有 ${missing.length} 題未作答：第 ${missing.join(", ")} 題`;
+    return;
+  }
+
+  const computed = computeFromAnswers(answers);
+  await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });
+  renderResult({ score: computed.score, code: computed.code });
+
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+  document.getElementById("result").style.display = "none";
+  const msg = document.getElementById("msg");
+  msg.style.display = "none";
+  msg.textContent = "";
+
+  const url = new URL(window.location.href);
+  ["r","sig", ...dims.map(d => d.param)].forEach(k => url.searchParams.delete(k));
+  window.history.replaceState({}, "", url.toString());
+
+  document.getElementById("mainActions").style.display = "";
+  document.getElementById("topHint").innerHTML =
+    `作答方式：每題選一個選項；該選項對應的字母 +1。<br/>
+     結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。`;
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/** =========================
+ *  讀取分享連結（含 sig）
+ *  ========================= */
+
+async function showResultFromParamsIfAny() {
+  const url = new URL(window.location.href);
+  const r = (url.searchParams.get("r") || "").toUpperCase().trim();
+  if (!r) return;
+
+  const codeOk = /^[BT][PV][CD][OF]$/.test(r) && typeMap[r];
+  if (!codeOk) return;
+
+  const sig = (url.searchParams.get("sig") || "").trim();
+  if (!sig) {
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.textContent = "此分享連結缺少驗證碼（sig），可能已被修改或版本過舊。";
+    return;
+  }
+
+  // 解析四組分數
+  const pairs = {};
+  const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
+
+  for (const d of dims) {
+    const raw = (url.searchParams.get(d.param) || "").trim();
+    const pair = decodePair(raw);
+    if (!pair) {
+      const msg = document.getElementById("msg");
+      msg.style.display = "block";
+      msg.textContent = "此分享連結的分數參數不完整或不合法（需為 5 題制，例如 4-1）。";
+      return;
+    }
+    pairs[d.param] = raw;
+    score[d.keyA] = pair.a;
+    score[d.keyB] = pair.b;
+
+    // 分數必須與 r 的勝負一致
+    const winner = (pair.a > pair.b) ? d.keyA : d.keyB;
+    const expected = r[dims.indexOf(d)];
+    if (winner !== expected) {
+      const msg = document.getElementById("msg");
+      msg.style.display = "block";
+      msg.textContent = "分享連結的 r 與分數勝負不一致，可能被手動修改。";
+      return;
+    }
+  }
+
+  // 驗證 sig
+  const expectedSig = await makeSig(r, pairs);
+  if (expectedSig !== sig) {
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.textContent = "此分享連結已被修改（sig 驗證失敗）。請重新產生分享連結。";
+    return;
+  }
+
+  // 進入分享展示模式
+  document.getElementById("topHint").innerHTML =
+    `你正在查看分享結果：<span class="mono">${r}</span>（此連結包含真實分數，且已通過驗證）`;
+  document.getElementById("mainActions").style.display = "none";
+
+  renderResult({ score, code: r });
+  document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+}
+
+/** =========================
+ *  初始化
+ *  ========================= */
+
+renderQuiz();
+showResultFromParamsIfAny();
+
+document.getElementById("btnCalc").addEventListener("click", calcFromUI);
+document.getElementById("btnReset").addEventListener("click", resetAll);
+
+document.getElementById("btnCopyLink").addEventListener("click", async () => {
+  const url = new URL(window.location.href);
+  const hasR = url.searchParams.get("r");
+  const hasSig = url.searchParams.get("sig");
+  if (!hasR || !hasSig) {
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.textContent = "請先完成 20 題並按「計算結果」，才會產生可分享的連結（含 sig）。";
+    return;
+  }
+  copyText(window.location.href);
+});
+
+document.getElementById("btnCopyCard").addEventListener("click", async () => {
+  const url = new URL(window.location.href);
+  const r = (url.searchParams.get("r") || "").toUpperCase().trim();
+  const sig = (url.searchParams.get("sig") || "").trim();
+
+  // 若 URL 有完整參數，先驗 sig 再複製（避免複製到被改過的連結）
+  if (r && typeMap[r] && sig) {
+    const pairs = {};
+    const score = { B:0, T:0, P:0, V:0, C:0, D:0, O:0, F:0 };
+
+    for (const d of dims) {
+      const raw = (url.searchParams.get(d.param) || "").trim();
+      const pair = decodePair(raw);
+      if (!pair) {
+        const msg = document.getElementById("msg");
+        msg.style.display = "block";
+        msg.textContent = "目前網址缺少完整分數參數，請重新計算結果後再複製結果卡。";
+        return;
+      }
+      pairs[d.param] = raw;
+      score[d.keyA] = pair.a;
+      score[d.keyB] = pair.b;
+    }
+
+    const expectedSig = await makeSig(r, pairs);
+    if (expectedSig !== sig) {
+      const msg = document.getElementById("msg");
+      msg.style.display = "block";
+      msg.textContent = "目前網址的 sig 驗證失敗（可能被改過）。請重新計算結果產生新連結。";
+      return;
+    }
+
+    copyText(buildResultCardText({ score, code: r }));
+    return;
+  }
+
+  // 否則：使用作答重算（也會寫入 URL + sig）
+  const answers = getAnswers();
+  if (answers.some(v => !v)) {
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.textContent = "要複製結果卡前，請先完成 20 題並計算結果。";
+    return;
+  }
+
+  const computed = computeFromAnswers(answers);
+  await setShareParamsWithSig({ code: computed.code, pairs: computed.pairs });
+  renderResult({ score: computed.score, code: computed.code });
+  copyText(buildResultCardText({ score: computed.score, code: computed.code }));
+});
+</script>
+</body>
+</html>
