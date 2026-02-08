@@ -170,9 +170,27 @@
 
     <div id="result" class="result">
       <div class="result-hero">
-        <div class="type-img-wrap" aria-label="結果插圖">
-          <img id="typeImg" class="type-img" alt="結果圖片" />
-        </div>
+       .type-sprite{
+  width:var(--spriteW);
+  height:calc(var(--spriteW) * var(--spriteAR));
+  border-radius:28px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
+  flex:0 0 auto;
+  margin:0 auto;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.type-sprite img{
+  width:100%;
+  height:100%;
+  object-fit:cover; /* ✅ 不会截到下一张 */
+  display:block;
+}
+
 
         <div class="type-meta">
           <div class="type-code">你的四字母：<span class="mono" id="code"></span></div>
