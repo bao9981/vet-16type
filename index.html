@@ -531,22 +531,12 @@ function buildCollectURL(payload){
 }
 
 /** 用 Image beacon 送出（跨域最稳） */
-function sendStatsCollect(payload){
+function sendStatsCollect(payload, timeoutMs = 8000){
   return new Promise((resolve)=>{
-    const img = new Image();
-    img.onload = ()=>resolve({ok:true});
-    img.onerror = ()=>resolve({ok:false});
-    img.src = buildCollectURL(payload);
-  });
-}
-
-/** 统计读取：JSONP */
-function loadStatsJSONP(timeoutMs=8000){
-  return new Promise((resolve)=>{
-    const cb = "__stats_cb_" + Math.random().toString(36).slice(2);
+    const cb = "__collect_cb_" + Math.random().toString(36).slice(2);
     const timer = setTimeout(()=>{
       cleanup();
-      resolve(null);
+      resolve({ok:false, reason:"timeout"});
     }, timeoutMs);
 
     let script = null;
@@ -558,23 +548,81 @@ function loadStatsJSONP(timeoutMs=8000){
 
     window[cb] = (data)=>{
       cleanup();
-      resolve(data || null);
+      resolve(data && data.ok ? {ok:true} : {ok:false, reason:"server_return"});
     };
 
     const url = new URL(STATS_ENDPOINT);
-    // ⚠️ 这里用 searchParams 组装，绝不会出现 %3F
+    url.searchParams.set("collect","1");
     url.searchParams.set("callback", cb);
+
+    // payload
+    url.searchParams.set("type", payload.type || "");
+    url.searchParams.set("r", payload.r || "");
+    url.searchParams.set("bt", payload.bt || "");
+    url.searchParams.set("pv", payload.pv || "");
+    url.searchParams.set("cd", payload.cd || "");
+    url.searchParams.set("of", payload.of || "");
+    url.searchParams.set("role", payload.role || "");
+    url.searchParams.set("group", payload.group || "");
+    url.searchParams.set("ua", payload.ua || "");
     url.searchParams.set("_", Date.now().toString());
 
     script = document.createElement("script");
     script.src = url.toString();
     script.onerror = ()=>{
       cleanup();
-      resolve(null);
+      resolve({ok:false, reason:"script_error"});
     };
     document.head.appendChild(script);
   });
 }
+
+/** 统计读取：JSONP */
+function sendStatsCollect(payload, timeoutMs = 8000){
+  return new Promise((resolve)=>{
+    const cb = "__collect_cb_" + Math.random().toString(36).slice(2);
+    const timer = setTimeout(()=>{
+      cleanup();
+      resolve({ok:false, reason:"timeout"});
+    }, timeoutMs);
+
+    let script = null;
+    function cleanup(){
+      clearTimeout(timer);
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cb] = (data)=>{
+      cleanup();
+      resolve(data && data.ok ? {ok:true} : {ok:false, reason:"server_return"});
+    };
+
+    const url = new URL(STATS_ENDPOINT);
+    url.searchParams.set("collect","1");
+    url.searchParams.set("callback", cb);
+
+    url.searchParams.set("type", payload.type || "");
+    url.searchParams.set("r", payload.r || "");
+    url.searchParams.set("bt", payload.bt || "");
+    url.searchParams.set("pv", payload.pv || "");
+    url.searchParams.set("cd", payload.cd || "");
+    url.searchParams.set("of", payload.of || "");
+    url.searchParams.set("role", payload.role || "");
+    url.searchParams.set("group", payload.group || "");
+    url.searchParams.set("ua", payload.ua || "");
+    url.searchParams.set("_", Date.now().toString());
+
+    script = document.createElement("script");
+    script.src = url.toString();
+    script.onerror = ()=>{
+      cleanup();
+      resolve({ok:false, reason:"script_error"});
+    };
+    document.head.appendChild(script);
+  });
+}
+
 
 /** ============ 身份下拉初始化 ============ */
 function initRoleSelects(){
@@ -815,10 +863,9 @@ document.getElementById("btnSendRole").addEventListener("click", async ()=>{
     ua: navigator.userAgent
   };
 
-  const res = await sendStatsCollect(payload);
-  if (res.ok) toast("已送出統計 ✅");
-  else showMsg("統計送出失敗：請確認 Apps Script /exec 可存取，且部署允許「任何人」。");
-});
+const res = await sendStatsCollect(payload);
+if (res.ok) toast("已送出統計 ✅");
+else showMsg("統計送出失敗：請確認 Apps Script /exec 可存取，且部署允許「任何人」。");
 
 document.getElementById("btnRefresh").addEventListener("click", async ()=>{
   hideMsg();
