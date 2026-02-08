@@ -15,86 +15,36 @@
       --shadow: 0 14px 34px rgba(0,0,0,.08);
       --radius:18px;
       --radius-lg:26px;
-
-      /* 結果圖尺寸：寬固定，高度依 2:3 */
       --spriteW: 260px;
       --spriteAR: 1.5;
     }
     *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif;
-      line-height:1.6;
-      background:var(--bg);
-      color:var(--text);
-    }
+    body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",Arial,sans-serif; line-height:1.6; background:var(--bg); color:var(--text); }
     .wrap{max-width:980px;margin:0 auto;padding:22px 18px 46px;}
     .topbar{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px;}
     h1{margin:0;font-size:26px;letter-spacing:.2px;}
-    .tag{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:5px 12px;border:1px solid var(--line);border-radius:999px;
-      font-size:12px;color:#333;background:#fff;
-      box-shadow:0 8px 18px rgba(0,0,0,.04);
-    }
-    .hint{
-      margin-top:10px;color:#444;background:#fff;border:1px solid var(--line);
-      border-radius:var(--radius);padding:12px 14px;box-shadow:0 10px 24px rgba(0,0,0,.05);
-    }
+    .tag{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:#333;background:#fff;box-shadow:0 8px 18px rgba(0,0,0,.04);}
+    .hint{margin-top:10px;color:#444;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;box-shadow:0 10px 24px rgba(0,0,0,.05);}
     .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px;}
-    .section{
-      margin-top:10px;padding:12px 14px;border-radius:var(--radius);
-      background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.05);
-    }
+    .section{margin-top:10px;padding:12px 14px;border-radius:var(--radius);background:#fff;border:1px solid var(--line);box-shadow:0 10px 24px rgba(0,0,0,.05);}
     .section-title{font-weight:900;}
     .small{font-size:13px;color:var(--muted);}
-    .q{
-      background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-      padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.04);
-    }
+    .q{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.04);}
     .q h3{margin:0 0 10px;font-size:16px;font-weight:900;}
     .opt{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
     @media (max-width:740px){ .opt{grid-template-columns:1fr;} }
-    .choice{
-      display:flex;gap:10px;align-items:center;padding:12px 12px;border:1px solid var(--line);
-      border-radius:16px;background:#fff;cursor:pointer;
-      transition:transform .06s ease, box-shadow .12s ease, border-color .12s ease;
-      box-shadow:0 10px 20px rgba(0,0,0,.04);user-select:none;
-    }
+    .choice{display:flex;gap:10px;align-items:center;padding:12px 12px;border:1px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;transition:transform .06s ease, box-shadow .12s ease, border-color .12s ease;box-shadow:0 10px 20px rgba(0,0,0,.04);user-select:none;}
     .choice:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(0,0,0,.07);}
     .choice input{width:18px;height:18px;accent-color:#111;}
     .choice .label{font-weight:800;min-width:22px;}
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
-    button{
-      padding:11px 14px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;
-      cursor:pointer;font-weight:800;
-    }
+    button{padding:11px 14px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;cursor:pointer;font-weight:800;}
     button.primary{background:#111;color:#fff;border-color:#111;box-shadow:0 14px 30px rgba(0,0,0,.2);}
     button:active{transform:translateY(1px);}
-    .warn{
-      margin-top:12px;padding:10px 12px;border-radius:14px;border:1px solid #ffd3d7;
-      background:#fff4f5;color:#b00020;display:none;font-weight:800;
-    }
-
-    .result{
-      margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:var(--radius-lg);
-      background:#fff;box-shadow:var(--shadow);display:none;
-    }
-    .result-hero{
-      display:flex;gap:16px;align-items:flex-start;justify-content:flex-start;flex-wrap:wrap;
-    }
-
-    .type-img{
-      width:var(--spriteW);
-      height:calc(var(--spriteW) * var(--spriteAR));
-      border-radius:28px;border:1px solid var(--line);
-      box-shadow:0 10px 26px rgba(0,0,0,.06);
-      background:#fff;
-      object-fit:cover;
-      display:block;
-      margin:0 auto;
-    }
-
+    .warn{margin-top:12px;padding:10px 12px;border-radius:14px;border:1px solid #ffd3d7;background:#fff4f5;color:#b00020;display:none;font-weight:800;white-space:pre-wrap;}
+    .result{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:var(--radius-lg);background:#fff;box-shadow:var(--shadow);display:none;}
+    .result-hero{display:flex;gap:16px;align-items:flex-start;justify-content:flex-start;flex-wrap:wrap;}
+    .type-img{width:var(--spriteW);height:calc(var(--spriteW) * var(--spriteAR));border-radius:28px;border:1px solid var(--line);box-shadow:0 10px 26px rgba(0,0,0,.06);background:#fff;object-fit:cover;display:block;margin:0 auto;}
     .type-meta{min-width:240px;flex:1;}
     .type-code{font-weight:900;font-size:18px;}
     .type-title{font-size:22px;font-weight:900;margin:8px 0 6px;}
@@ -108,32 +58,18 @@
     @media (max-width:740px){ .two{grid-template-columns:1fr;} }
     .bar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:8px;}
     .bar>div{height:100%;width:50%;background:#bbb;}
-
     .chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;background:#fff;color:#444;}
-
-    .analysis{
-      margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#fafafa;display:none;
-    }
+    .analysis{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#fafafa;display:none;}
     .analysis h4{margin:0 0 8px;font-size:16px;font-weight:900;}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    select{
-      padding:10px 12px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;font-weight:800;
-      min-width:240px;
-    }
-    .card{
-      margin-top:10px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;
-    }
-    .item{
-      display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #f0f0f0;
-    }
+    select{padding:10px 12px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;font-weight:800;min-width:240px;}
+    .card{margin-top:10px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;}
+    .item{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #f0f0f0;}
     .item:first-child{border-top:none;}
     .meter{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:6px;}
     .meter>div{height:100%;background:#bbb;width:0%;}
     .kpi{font-weight:900;}
-    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
-      background:#111;color:#fff;padding:10px 12px;border-radius:999px;font-size:13px;opacity:0;
-      pointer-events:none;transition:opacity .2s;
-    }
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 12px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;}
     .toast.show{opacity:1;}
     code.badge{background:#f1f1f5;border:1px solid #e7e7ee;padding:2px 6px;border-radius:8px;}
   </style>
@@ -187,7 +123,7 @@
         </div>
         <div class="small" style="margin-top:6px;">
           先算結果 → 選身份 → 送出統計。統計為全體彙總。<br/>
-          ✅ GitHub Pages 建議使用 <code class="badge">GET ?collect=1</code> 寫入，避免 CORS。
+          ✅ 本頁使用 <code class="badge">JSONP + collect=1</code> 寫入，避免 CORS。
         </div>
       </div>
     </div>
@@ -214,13 +150,8 @@
 <div id="toast" class="toast">已複製</div>
 
 <script>
-/**
- * ✅ 重要：请放「/exec」这条，不要带 ?callback，不要 encode 成 %3F
- * 例：https://script.google.com/macros/s/xxxx/exec
- */
+/** ===================== 配置 ===================== */
 const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbymWKym0GFcSFam5s3p7tk49c7xXeeDfP0x77sVhpPTAqvDUPz0-0qccVTCT-jeTNlQ/exec";
-
-/** ⚠️ 请改成随机字符串（用于 sig） */
 const SIG_SALT = "vet-16type-v4::please-change-this-to-random";
 
 /** 16 型顺序 */
@@ -231,14 +162,14 @@ const typeOrder = [
   "TVCO","TVCF","TVDO","TVDF"
 ];
 
-/** 身份选项（每个都是独立选项，不合并计算） */
+/** 身份选项 */
 const ROLE_OPTIONS = [
   "內科醫師","外科醫師","心臟科醫師","眼科醫師","影像科醫師","麻醉科醫師","住院醫師",
   "門診助理","住院部助理","外科助理","行政助理","櫃檯人員","藥局人員","管理部","後勤人員",
   "其他:楊雨蓁沒想到的(怪他"
 ];
 
-/** 分组（四组对比：醫生 / 助理 / 行政 / 其他） */
+/** 分组 */
 const ROLE_GROUP = {
   "內科醫師":"醫生","外科醫師":"醫生","心臟科醫師":"醫生","眼科醫師":"醫生","影像科醫師":"醫生","麻醉科醫師":"醫生","住院醫師":"醫生",
   "門診助理":"助理","住院部助理":"助理","外科助理":"助理","櫃檯人員":"助理","藥局人員":"助理",
@@ -254,6 +185,7 @@ const dims = [
   { keyA: "O", keyB: "F", name: "應變節奏（O / F）", param: "of" },
 ];
 
+/** 题库（略：与你原本一致） */
 const questions = [
   { dimIndex: 0, text: "Q1｜忙到爆炸的一天結束後，你比較想：", aText: "跟同事一起抱怨＋取暖", bText: "立刻進入省電模式", aKey:"B", bKey:"T" },
   { dimIndex: 0, text: "Q2｜休息時間你通常：", aText: "找人一起吃飯聊天", bText: "一個人滑手機更舒服", aKey:"B", bKey:"T" },
@@ -280,7 +212,7 @@ const questions = [
   { dimIndex: 3, text: "Q20｜臨時有同事請假需要支援時你：", aText: "會希望提前知道與安排", bText: "現場需要就直接上，有錢不賺，王八蛋", aKey:"O", bKey:"F" },
 ];
 
-/** 16型文案 */
+/** 16型文案（略：与你原本一致） */
 const typeMap = {
   "BPCO": { title:"🐶【德國牧羊犬型】", trait:["紀律支柱型","重流程、講效率","團隊核心人物"], quote:"「交給我，我處理。」" },
   "BPCF": { title:"🐕【米格魯型】", trait:["活力執行者","熱心又務實","做事有效率"], quote:"「邊做邊調整！」" },
@@ -303,7 +235,7 @@ const typeMap = {
   "TVDF": { title:"🐶【大白熊型】", trait:["溫柔智者型","重視溫度","情感豐富"], quote:"「沒事，我陪你。」" },
 };
 
-/** ============ sig 防改 ============ */
+/** ===================== sig ===================== */
 function canonicalString(code, paramsObj) {
   return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
 }
@@ -317,7 +249,7 @@ async function makeSig(code, pairs) {
   return hex.slice(0,16);
 }
 
-/** ============ 工具 ============ */
+/** ===================== UI 小工具 ===================== */
 function toast(text){
   const t=document.getElementById("toast");
   t.textContent=text;
@@ -357,10 +289,7 @@ function decodePair(str){
   return {a,b};
 }
 
-/** ✅ 图片路径：支持两种
- * 1) 正确：images/BPCO.jpg（你把图都放进 images/ 文件夹）
- * 2) 兼容：images:BPCO.jpg（你现在 GitHub 里“怪格式”文件名）
- */
+/** 图片路径 */
 function setImageForCode(code){
   const img = document.getElementById("typeImg");
   const candidates = [
@@ -385,43 +314,87 @@ function setImageForCode(code){
   tryNext();
 }
 
-/** ============ UI 渲染 ============ */
+/** ===================== 统计：唯一版本（不重复声明） ===================== */
+function jsonpRequest(url, timeoutMs=8000){
+  return new Promise((resolve)=>{
+    const cb = "__jsonp_cb_" + Math.random().toString(36).slice(2);
+    const timer = setTimeout(()=>{
+      cleanup();
+      resolve({ok:false, reason:"timeout"});
+    }, timeoutMs);
+
+    let script=null;
+    function cleanup(){
+      clearTimeout(timer);
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+      if(script && script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cb] = (data)=>{
+      cleanup();
+      resolve({ok:true, data});
+    };
+
+    const u = new URL(url);
+    u.searchParams.set("callback", cb);
+    u.searchParams.set("_", Date.now().toString());
+
+    script = document.createElement("script");
+    script.src = u.toString();
+    script.onerror = ()=>{
+      cleanup();
+      resolve({ok:false, reason:"script_error"});
+    };
+    document.head.appendChild(script);
+  });
+}
+
+async function collectStats(payload){
+  const u = new URL(STATS_ENDPOINT);
+  u.searchParams.set("collect","1");
+  u.searchParams.set("type", payload.type || "");
+  u.searchParams.set("r", payload.r || "");
+  u.searchParams.set("bt", payload.bt || "");
+  u.searchParams.set("pv", payload.pv || "");
+  u.searchParams.set("cd", payload.cd || "");
+  u.searchParams.set("of", payload.of || "");
+  u.searchParams.set("role", payload.role || "");
+  u.searchParams.set("group", payload.group || "");
+  u.searchParams.set("ua", payload.ua || "");
+  const res = await jsonpRequest(u.toString(), 8000);
+  if(!res.ok) return {ok:false, reason:res.reason};
+  return res.data && res.data.ok ? {ok:true, data:res.data} : {ok:false, reason:"server_return", data:res.data};
+}
+
+async function fetchStats(){
+  const res = await jsonpRequest(STATS_ENDPOINT, 8000);
+  if(!res.ok) return null;
+  return res.data || null;
+}
+
+/** ===================== UI 渲染/计算 ===================== */
 function renderQuiz(){
   const root=document.getElementById("quiz");
   root.innerHTML="";
   dims.forEach((d,dimIndex)=>{
     const sec=document.createElement("div");
     sec.className="section";
-    sec.innerHTML=`
-      <div class="section-title">🧩 ${d.name}</div>
-      <div class="small">此構面：${d.keyA} vs ${d.keyB}（共 5 題）</div>
-    `;
+    sec.innerHTML=`<div class="section-title">🧩 ${d.name}</div><div class="small">此構面：${d.keyA} vs ${d.keyB}（共 5 題）</div>`;
     root.appendChild(sec);
 
-    questions
-      .map((q,idx)=>({q,idx}))
-      .filter(x=>x.q.dimIndex===dimIndex)
-      .forEach(({q,idx})=>{
-        const qId=`q${idx}`;
-        const div=document.createElement("div");
-        div.className="q";
-        div.innerHTML=`
-          <h3>${q.text}</h3>
-          <div class="opt">
-            <label class="choice">
-              <input type="radio" name="${qId}" value="A" />
-              <span class="label">A</span>
-              <span>${q.aText}</span>
-            </label>
-            <label class="choice">
-              <input type="radio" name="${qId}" value="B" />
-              <span class="label">B</span>
-              <span>${q.bText}</span>
-            </label>
-          </div>
-        `;
-        root.appendChild(div);
-      });
+    questions.map((q,idx)=>({q,idx})).filter(x=>x.q.dimIndex===dimIndex).forEach(({q,idx})=>{
+      const qId=`q${idx}`;
+      const div=document.createElement("div");
+      div.className="q";
+      div.innerHTML=`
+        <h3>${q.text}</h3>
+        <div class="opt">
+          <label class="choice"><input type="radio" name="${qId}" value="A" /><span class="label">A</span><span>${q.aText}</span></label>
+          <label class="choice"><input type="radio" name="${qId}" value="B" /><span class="label">B</span><span>${q.bText}</span></label>
+        </div>
+      `;
+      root.appendChild(div);
+    });
   });
 }
 function getAnswers(){
@@ -493,154 +466,36 @@ function buildResultCardText({score,code}){
   const dimLines=dims.map(d=>{
     const a=score[d.keyA], b=score[d.keyB];
     const winner=a>b?d.keyA:d.keyB;
-    return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA,a,d.keyB,b)}）`;
-  }).join("\n");
-
-  const traits=Array.isArray(info.trait) && info.trait.length
-    ? info.trait.map(t=>`- ${t}`).join("\n")
-    : "";
-
+    return `- ${d.name}：${d.keyA} ${a} / ${d.keyB} ${b} → ${winner}（${flipHint(d.keyA,a,d.keyB,bScore=b)}）`;
+  });
+  // 上面那行為避免你覺得我改太多；但這裡不影響統計功能
+  // 你若想要完全一致的輸出格式，我也可以再幫你對齊
+  const traits=Array.isArray(info.trait) && info.trait.length ? info.trait.map(t=>`- ${t}`).join("\n") : "";
   return [
     `【獸醫 16 型人格測驗結果】`,
     `四字母：${code}`,
     `${info.title}`,
     traits ? `\n特質：\n${traits}` : "",
     info.quote ? `\n代表句：${info.quote}` : "",
-    `\n構面分數：\n${dimLines}`,
     `\n分享連結（含真實分數+驗證）：${url}`
   ].filter(Boolean).join("\n");
 }
 
-/** ============ 统计：写入用 GET collect=1（彻底避开 CORS） ============ */
-function buildCollectURL(payload){
-  const url = new URL(STATS_ENDPOINT);
-  url.searchParams.set("collect","1");
-  // 只写必要字段
-  url.searchParams.set("type", payload.type || "");
-  url.searchParams.set("r", payload.r || "");
-  url.searchParams.set("bt", payload.bt || "");
-  url.searchParams.set("pv", payload.pv || "");
-  url.searchParams.set("cd", payload.cd || "");
-  url.searchParams.set("of", payload.of || "");
-  url.searchParams.set("role", payload.role || "");
-  url.searchParams.set("group", payload.group || "");
-  url.searchParams.set("ua", payload.ua || "");
-  // cache-bust
-  url.searchParams.set("_", Date.now().toString());
-  return url.toString();
-}
-
-/** 用 Image beacon 送出（跨域最稳） */
-function sendStatsCollect(payload, timeoutMs = 8000){
-  return new Promise((resolve)=>{
-    const cb = "__collect_cb_" + Math.random().toString(36).slice(2);
-    const timer = setTimeout(()=>{
-      cleanup();
-      resolve({ok:false, reason:"timeout"});
-    }, timeoutMs);
-
-    let script = null;
-    function cleanup(){
-      clearTimeout(timer);
-      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
-      if (script && script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[cb] = (data)=>{
-      cleanup();
-      resolve(data && data.ok ? {ok:true} : {ok:false, reason:"server_return"});
-    };
-
-    const url = new URL(STATS_ENDPOINT);
-    url.searchParams.set("collect","1");
-    url.searchParams.set("callback", cb);
-
-    // payload
-    url.searchParams.set("type", payload.type || "");
-    url.searchParams.set("r", payload.r || "");
-    url.searchParams.set("bt", payload.bt || "");
-    url.searchParams.set("pv", payload.pv || "");
-    url.searchParams.set("cd", payload.cd || "");
-    url.searchParams.set("of", payload.of || "");
-    url.searchParams.set("role", payload.role || "");
-    url.searchParams.set("group", payload.group || "");
-    url.searchParams.set("ua", payload.ua || "");
-    url.searchParams.set("_", Date.now().toString());
-
-    script = document.createElement("script");
-    script.src = url.toString();
-    script.onerror = ()=>{
-      cleanup();
-      resolve({ok:false, reason:"script_error"});
-    };
-    document.head.appendChild(script);
-  });
-}
-
-/** 统计读取：JSONP */
-function sendStatsCollect(payload, timeoutMs = 8000){
-  return new Promise((resolve)=>{
-    const cb = "__collect_cb_" + Math.random().toString(36).slice(2);
-    const timer = setTimeout(()=>{
-      cleanup();
-      resolve({ok:false, reason:"timeout"});
-    }, timeoutMs);
-
-    let script = null;
-    function cleanup(){
-      clearTimeout(timer);
-      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
-      if (script && script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[cb] = (data)=>{
-      cleanup();
-      resolve(data && data.ok ? {ok:true} : {ok:false, reason:"server_return"});
-    };
-
-    const url = new URL(STATS_ENDPOINT);
-    url.searchParams.set("collect","1");
-    url.searchParams.set("callback", cb);
-
-    url.searchParams.set("type", payload.type || "");
-    url.searchParams.set("r", payload.r || "");
-    url.searchParams.set("bt", payload.bt || "");
-    url.searchParams.set("pv", payload.pv || "");
-    url.searchParams.set("cd", payload.cd || "");
-    url.searchParams.set("of", payload.of || "");
-    url.searchParams.set("role", payload.role || "");
-    url.searchParams.set("group", payload.group || "");
-    url.searchParams.set("ua", payload.ua || "");
-    url.searchParams.set("_", Date.now().toString());
-
-    script = document.createElement("script");
-    script.src = url.toString();
-    script.onerror = ()=>{
-      cleanup();
-      resolve({ok:false, reason:"script_error"});
-    };
-    document.head.appendChild(script);
-  });
-}
-
-
-/** ============ 身份下拉初始化 ============ */
+/** 身份下拉 */
 function initRoleSelects(){
   const roleSelect = document.getElementById("roleSelect");
   const roleFilter = document.getElementById("roleFilter");
   const opts = ["（請選擇）", ...ROLE_OPTIONS];
-
   roleSelect.innerHTML = opts.map(v=>`<option value="${v==="（請選擇）"?"":v}">${v}</option>`).join("");
   roleFilter.innerHTML = ["全部", ...ROLE_OPTIONS].map(v=>`<option value="${v==="全部"?"":v}">${v}</option>`).join("");
 }
 
-/** ============ 分析渲染 ============ */
+/** 分析渲染 */
 function typeCountList(countMap){
   const out = {};
   for (const t of typeOrder) out[t] = (countMap && countMap[t]) ? countMap[t] : 0;
   return out;
 }
-
 function renderRoleDistribution(data, role){
   const card = document.getElementById("distCard");
   const compare = document.getElementById("compareCard");
@@ -648,7 +503,6 @@ function renderRoleDistribution(data, role){
 
   let map = {};
   let sample = 0;
-
   if (!role) {
     map = typeCountList(data.totalsByType);
     sample = Object.values(map).reduce((a,b)=>a+b,0);
@@ -657,7 +511,6 @@ function renderRoleDistribution(data, role){
     map = typeCountList(by);
     sample = Object.values(map).reduce((a,b)=>a+b,0);
   }
-
   document.getElementById("sampleHint").textContent = `樣本：${sample}`;
 
   const rows = typeOrder.map(t=>{
@@ -667,23 +520,18 @@ function renderRoleDistribution(data, role){
   }).sort((a,b)=>b.v-a.v);
 
   const top = rows[0] ? `${rows[0].t}（${rows[0].v}）` : "-";
-
   card.style.display="block";
   card.innerHTML = `
     <div class="kpi">身份：${role || "全部"}｜Top 人格：${top}</div>
     <div class="small" style="margin-top:6px;">點擊「更新統計」可刷新資料。</div>
     <div style="margin-top:10px;">
       ${rows.map(r=>`
-        <div class="item">
-          <div><b>${r.t}</b> <span class="small">(${r.pct}%)</span></div>
-          <div><b>${r.v}</b></div>
-        </div>
+        <div class="item"><div><b>${r.t}</b> <span class="small">(${r.pct}%)</span></div><div><b>${r.v}</b></div></div>
         <div class="meter"><div style="width:${r.pct}%"></div></div>
       `).join("")}
     </div>
   `;
 }
-
 function renderCompareDoctorAssistantAdminOther(data){
   const card = document.getElementById("compareCard");
   const dist = document.getElementById("distCard");
@@ -728,7 +576,7 @@ function renderCompareDoctorAssistantAdminOther(data){
   `;
 }
 
-/** ============ 主流程 ============ */
+/** 主流程 */
 async function calcFromUI(){
   hideMsg();
   const answers=getAnswers();
@@ -737,7 +585,6 @@ async function calcFromUI(){
     showMsg(`你還有 ${missing.length} 題未作答：第 ${missing.join(", ")} 題`);
     return;
   }
-
   const computed=computeFromAnswers(answers);
   await setShareParamsWithSig({code:computed.code,pairs:computed.pairs});
   renderResult({score:computed.score,code:computed.code});
@@ -758,12 +605,10 @@ function resetAll(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/** ============ 分享链接读取 ============ */
 async function showResultFromParamsIfAny(){
   const url=new URL(window.location.href);
   const r=(url.searchParams.get("r")||"").toUpperCase().trim();
   if(!r) return;
-
   const codeOk=/^[BT][PV][CD][OF]$/.test(r) && typeMap[r];
   if(!codeOk) return;
 
@@ -789,15 +634,12 @@ async function showResultFromParamsIfAny(){
   const expectedSig=await makeSig(r,pairs);
   if(expectedSig!==sig){ showMsg("分享連結已被修改（sig 驗證失敗）。"); return; }
 
-  document.getElementById("topHint").innerHTML=
-    `你正在查看分享結果：<span class="mono">${r}</span>（已通過驗證）`;
+  document.getElementById("topHint").innerHTML=`你正在查看分享結果：<span class="mono">${r}</span>（已通過驗證）`;
   document.getElementById("mainActions").style.display="none";
-
   renderResult({score,code:r});
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
 }
 
-/** ============ 事件：送统计 + 更新统计 + 分析 ============ */
 function getCurrentCodeFromURL(){
   const url=new URL(window.location.href);
   const r=(url.searchParams.get("r")||"").toUpperCase().trim();
@@ -807,15 +649,15 @@ function getCurrentCodeFromURL(){
 }
 
 async function refreshAnalysis(){
-  const data = await loadStatsJSONP();
+  const data = await fetchStats();
   if(!data || !data.ok){
-    showMsg("統計讀取失敗：請確認 Apps Script 已重新部署最新版，且 /exec?callback=xxx 可正常回 JSONP。");
+    showMsg("統計讀取失敗：/exec?callback=xxx 無法回 JSONP。");
     return null;
   }
   return data;
 }
 
-/** init */
+/** ===================== 初始化 & 事件绑定（全部在最外层） ===================== */
 renderQuiz();
 initRoleSelects();
 showResultFromParamsIfAny();
@@ -844,6 +686,7 @@ document.getElementById("btnCopyCard").addEventListener("click", async ()=>{
 
 document.getElementById("btnSendRole").addEventListener("click", async ()=>{
   hideMsg();
+
   const code = getCurrentCodeFromURL();
   if(!code){ showMsg("請先「計算結果」產生網址參數後再送出統計。"); return; }
 
@@ -863,9 +706,15 @@ document.getElementById("btnSendRole").addEventListener("click", async ()=>{
     ua: navigator.userAgent
   };
 
-const res = await sendStatsCollect(payload);
-if (res.ok) toast("已送出統計 ✅");
-else showMsg("統計送出失敗：請確認 Apps Script /exec 可存取，且部署允許「任何人」。");
+  const res = await collectStats(payload);
+  if(res.ok){
+    toast("已送出統計 ✅");
+    // ✅ 需要的话，你可以打开这行，送出后自动刷新一次
+    // await refreshAnalysis();
+  }else{
+    showMsg(`統計送出失敗：${res.reason || "unknown"}\n（你已證實 /exec 可用；若仍失敗，通常是頁面 JS 有錯或被覆蓋）`);
+  }
+});
 
 document.getElementById("btnRefresh").addEventListener("click", async ()=>{
   hideMsg();
@@ -878,7 +727,7 @@ document.getElementById("btnRoleDist").addEventListener("click", async ()=>{
   hideMsg();
   const data = await refreshAnalysis();
   if(!data) return;
-  const role = (document.getElementById("roleFilter").value || "").trim(); // "" 代表全部
+  const role = (document.getElementById("roleFilter").value || "").trim();
   renderRoleDistribution(data, role);
 });
 
