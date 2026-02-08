@@ -16,8 +16,9 @@
       --radius:18px;
       --radius-lg:26px;
 
-      --imgW:260px; /* 你要：宽不变 */
-      --imgAR:1.5;  /* 高度 = 宽 * 1.5（2:3） */
+      /* 結果圖尺寸：寬固定，高度依 2:3 */
+      --spriteW: 260px;
+      --spriteAR: 1.5;
     }
     *{box-sizing:border-box;}
     body{
@@ -53,10 +54,11 @@
     }
     .q h3{margin:0 0 10px;font-size:16px;font-weight:900;}
     .opt{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    @media (max-width:740px){.opt{grid-template-columns:1fr;}}
+    @media (max-width:740px){ .opt{grid-template-columns:1fr;} }
     .choice{
       display:flex;gap:10px;align-items:center;padding:12px 12px;border:1px solid var(--line);
-      border-radius:16px;background:#fff;cursor:pointer;transition:transform .06s ease, box-shadow .12s ease, border-color .12s ease;
+      border-radius:16px;background:#fff;cursor:pointer;
+      transition:transform .06s ease, box-shadow .12s ease, border-color .12s ease;
       box-shadow:0 10px 20px rgba(0,0,0,.04);user-select:none;
     }
     .choice:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(0,0,0,.07);}
@@ -82,24 +84,16 @@
       display:flex;gap:16px;align-items:flex-start;justify-content:flex-start;flex-wrap:wrap;
     }
 
-    /* ✅ 用 img，彻底避免 sprite 截到下一张 */
-    .type-img-wrap{
-      width:var(--imgW);
-      height:calc(var(--imgW) * var(--imgAR));
-      border-radius:28px;
-      border:1px solid var(--line);
-      box-shadow:0 10px 26px rgba(0,0,0,.06);
-      overflow:hidden;
-      background:#fff;
-      flex:0 0 auto;
-      margin:0 auto;
-      display:block;
-    }
+    /* ✅ 16 张图片：用 <img>，避免 sprite 截到下一张 */
     .type-img{
-      width:100%;
-      height:100%;
-      object-fit:cover; /* 保持填满且不变形 */
+      width:var(--spriteW);
+      height:calc(var(--spriteW) * var(--spriteAR));
+      border-radius:28px;border:1px solid var(--line);
+      box-shadow:0 10px 26px rgba(0,0,0,.06);
+      background:#fff;
+      object-fit:cover;
       display:block;
+      margin:0 auto;
     }
 
     .type-meta{min-width:240px;flex:1;}
@@ -112,206 +106,153 @@
     .scores{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;}
     .score-line{padding:12px;border-radius:16px;border:1px solid var(--line);background:#fff;}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    @media (max-width:740px){.two{grid-template-columns:1fr;}}
+    @media (max-width:740px){ .two{grid-template-columns:1fr;} }
     .bar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:8px;}
     .bar>div{height:100%;width:50%;background:#bbb;}
 
-    /* 统计 + 交叉分析 */
-    .stats{
-      margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:18px;
-      background:#fafafa;display:none;
-    }
-    .stats h4{margin:0 0 8px;font-size:16px;font-weight:900;}
-    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    @media (max-width:740px){.stats-grid{grid-template-columns:1fr;}}
-    .stat-card{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;}
-    .stat-big{font-size:22px;font-weight:900;}
-    .rank{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
-    .rank-item{display:flex;justify-content:space-between;gap:10px;padding:6px 0;}
     .chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;background:#fff;color:#444;}
 
-    .xbox{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff;}
+    /* 分析区 */
+    .analysis{
+      margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#fafafa;display:none;
+    }
+    .analysis h4{margin:0 0 8px;font-size:16px;font-weight:900;}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-    select{padding:10px 12px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;font-weight:800;min-width:240px;}
-    .mini{font-size:12px;color:var(--muted);margin-top:6px;}
-    .dist{margin-top:10px;display:grid;gap:8px;}
-    .dist-item{border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff;}
-    .dist-line{display:flex;justify-content:space-between;gap:10px;font-weight:900;}
-    .dist-bar{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:8px;}
-    .dist-bar>div{height:100%;background:#bbb;width:0%;}
-    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 12px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;}
+    select{
+      padding:10px 12px;border-radius:14px;border:1px solid #d7d7dd;background:#fff;font-weight:800;
+      min-width:240px;
+    }
+    .card{
+      margin-top:10px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#fff;
+    }
+    .item{
+      display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #f0f0f0;
+    }
+    .item:first-child{border-top:none;}
+    .meter{height:10px;background:#eee;border-radius:999px;overflow:hidden;margin-top:6px;}
+    .meter>div{height:100%;background:#bbb;width:0%;}
+    .kpi{font-weight:900;}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:#111;color:#fff;padding:10px 12px;border-radius:999px;font-size:13px;opacity:0;
+      pointer-events:none;transition:opacity .2s;
+    }
     .toast.show{opacity:1;}
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div>
-        <h1>獸醫 16 型人格測驗</h1>
-        <div class="tag">20 題｜4 構面｜二選一｜可分享含真實分數</div>
-      </div>
-    </div>
-
-    <div class="hint" id="topHint">
-      作答方式：每題選一個選項（A 或 B）。<br/>
-      結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br/>
-      分享連結會包含真實分數與 sig 驗證，避免被亂改。
-    </div>
-
-    <div id="quiz" class="grid"></div>
-
-    <div class="actions" id="mainActions">
-      <button class="primary" id="btnCalc">計算結果</button>
-      <button id="btnReset">重填</button>
-    </div>
-
-    <div id="msg" class="warn"></div>
-
-    <div id="result" class="result">
-      <div class="result-hero">
-       .type-sprite{
-  width:var(--spriteW);
-  height:calc(var(--spriteW) * var(--spriteAR));
-  border-radius:28px;
-  background:#fff;
-  border:1px solid var(--line);
-  box-shadow:0 10px 26px rgba(0,0,0,.06);
-  flex:0 0 auto;
-  margin:0 auto;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.type-sprite img{
-  width:100%;
-  height:100%;
-  object-fit:cover; /* ✅ 不会截到下一张 */
-  display:block;
-}
-
-
-        <div class="type-meta">
-          <div class="type-code">你的四字母：<span class="mono" id="code"></span></div>
-          <div class="type-title" id="typeTitle"></div>
-          <div id="typeTrait"></div>
-          <div style="margin-top:10px;"><b>代表句：</b><span id="typeQuote"></span></div>
-
-          <div class="result-actions">
-            <button id="btnCopyLink">複製分享連結</button>
-            <button class="primary" id="btnCopyCard">複製結果卡</button>
-          </div>
-
-          <!-- ✅ 身份 × 人格交叉统计 -->
-          <div class="xbox" id="xbox">
-            <div style="font-weight:900;">身份（科別/職務，用於交叉統計）</div>
-            <div class="row" style="margin-top:8px;">
-              <select id="roleSelect"></select>
-              <button class="primary" id="btnSendStats">送出統計</button>
-              <button id="btnRefreshStats">更新統計</button>
-            </div>
-            <div class="mini">先算結果，再選身份送出統計；統計為全體彙總。</div>
-          </div>
-
-        </div>
-      </div>
-
-      <hr class="sep" />
-
-      <div style="font-weight:900;margin-bottom:8px;">各構面分數（含翻盤提示）</div>
-      <div id="scores" class="scores"></div>
-
-      <div class="stats" id="statsBox">
-        <h4>📊 全體結果統計 <span class="chip">已啟用</span></h4>
-        <div class="small" id="statsHint"></div>
-
-        <div class="stats-grid" style="margin-top:10px;">
-          <div class="stat-card">
-            <div class="small">目前已統計人次</div>
-            <div class="stat-big" id="statsTotal">-</div>
-          </div>
-          <div class="stat-card">
-            <div class="small">你的型（此型人數）</div>
-            <div class="stat-big" id="statsMine">-</div>
-          </div>
-        </div>
-
-        <div class="rank" id="statsRank"></div>
-
-        <hr class="sep" />
-
-        <div style="font-weight:900;margin-bottom:6px;">🔎 身份 × 16 型分布</div>
-        <div class="small">選擇身份後，可查看該身份的 16 型分布與 Top 人格。</div>
-        <div class="row" style="margin-top:8px;">
-          <select id="roleAnalyze"></select>
-          <button id="btnAnalyzeRole">查看分布</button>
-          <button id="btnCompare">医生 vs 助理</button>
-        </div>
-
-        <div id="analyzeOut" class="dist" style="margin-top:10px;"></div>
-      </div>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>獸醫 16 型人格測驗</h1>
+      <div class="tag">20 題｜4 構面｜二選一｜可分享含真實分數</div>
     </div>
   </div>
 
-  <div id="toast" class="toast">已複製</div>
+  <div class="hint" id="topHint">
+    作答方式：每題選一個選項（A 或 B）。<br/>
+    結果判斷：每個構面共 5 題，所以不會平手；分數較高者成為該構面字母，組成 4 字母後對應到 16 型。<br/>
+    分享連結會包含真實分數與 sig 驗證，避免被亂改。
+  </div>
+
+  <div id="quiz" class="grid"></div>
+
+  <div class="actions" id="mainActions">
+    <button class="primary" id="btnCalc">計算結果</button>
+    <button id="btnReset">重填</button>
+  </div>
+
+  <div id="msg" class="warn"></div>
+
+  <div id="result" class="result">
+    <div class="result-hero">
+      <img class="type-img" id="typeImg" alt="結果圖片" />
+      <div class="type-meta">
+        <div class="type-code">你的四字母：<span class="mono" id="code"></span></div>
+        <div class="type-title" id="typeTitle"></div>
+        <div id="typeTrait"></div>
+        <div style="margin-top:10px;"><b>代表句：</b><span id="typeQuote"></span></div>
+
+        <div class="result-actions">
+          <button id="btnCopyLink">複製分享連結</button>
+          <button class="primary" id="btnCopyCard">複製結果卡</button>
+        </div>
+
+        <hr class="sep" />
+
+        <div style="font-weight:900;margin-bottom:6px;">身份（科別/職務，用於交叉統計）</div>
+        <div class="row">
+          <select id="roleSelect"></select>
+          <button class="primary" id="btnSendRole">送出統計</button>
+          <button id="btnRefresh">更新統計</button>
+        </div>
+        <div class="small" style="margin-top:6px;">
+          先算結果 → 選身份 → 送出統計。統計為全體彙總。
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep" />
+    <div style="font-weight:900;margin-bottom:8px;">各構面分數（含翻盤提示）</div>
+    <div id="scores" class="scores"></div>
+
+    <div class="analysis" id="analysisBox">
+      <h4>🔎 身份 × 16 型分布</h4>
+      <div class="row">
+        <select id="roleFilter"></select>
+        <button class="primary" id="btnRoleDist">查看分布</button>
+        <button id="btnCompare">醫生 vs 助理 vs 行政 vs 其他</button>
+        <span class="chip" id="sampleHint">樣本：-</span>
+      </div>
+
+      <div class="card" id="distCard" style="display:none;"></div>
+      <div class="card" id="compareCard" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast">已複製</div>
 
 <script>
-/** =========================
- * ✅ 把这里换成你的 Apps Script Web App /exec
- * ========================= */
+/** ✅ 你的 Web App /exec */
 const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzePmt1K1lhGKttJFLS9YpBOqbn5qAHB7J0c-I5N57ZoSSpm5yFGA2PJmnqxCSadYkkOQ/exec";
+const SIG_SALT = "vet-16type-v3::please-change-this-to-random";
 
-/** ✅ 你现在 GitHub 上传会变成 images:BPCO.jpg（在 repo 根目录）；
- * 我们做容错：优先 images/BPCO.jpg，其次 images:BPCO.jpg，最后 ./BPCO.jpg
- */
-function setTypeImage(code){
-  const img = document.getElementById("typeImg");
-  const candidates = [
-    `images/${code}.jpg`,
-    `images:${code}.jpg`,
-    `${code}.jpg`,
-  ];
-
-  let i = 0;
-  const tryNext = () => {
-    if (i >= candidates.length) {
-      img.alt = `找不到圖片：${code}`;
-      img.removeAttribute("src");
-      return;
-    }
-    img.src = candidates[i];
-    i++;
-  };
-  img.onerror = tryNext;
-  tryNext();
-}
-
-/** =========================
- *  身份选项（每一项独立，不合并）
- * ========================= */
-const ROLE_OPTIONS = [
-  "內科醫師",
-  "外科醫師",
-  "心臟科醫師",
-  "眼科醫師",
-  "影像科醫師",
-  "麻醉科醫師",
-  "住院醫師",
-  "門診助理",
-  "住院部助理",
-  "外科助理",
-  "行政助理",
-  "櫃檯人員",
-  "藥局人員",
-  "管理部",
-  "後勤人員",
-  "其他:楊雨蓁沒有想到的(怪他"
+/** 16 型顺序 */
+const typeOrder = [
+  "BPCO","BPCF","BPDO","BPDF",
+  "BVCO","BVCF","BVDO","BVDF",
+  "TPCO","TPCF","TPDO","TPDF",
+  "TVCO","TVCF","TVDO","TVDF"
 ];
 
-/** =========================
- *  维度 & 题目（沿用你原版）
- * ========================= */
+/** 身份选项（每个都是独立选项，不合并计算） */
+const ROLE_OPTIONS = [
+  "內科醫師","外科醫師","心臟科醫師","眼科醫師","影像科醫師","麻醉科醫師","住院醫師",
+  "門診助理","住院部助理","外科助理","行政助理","櫃檯人員","藥局人員","管理部","後勤人員",
+  "其他：楊雨蓁沒有想到的（怪他）",
+  "其他"
+];
+
+/** 分组（用于 医生 vs 助理 vs 行政 三组对比） */
+const ROLE_GROUP = {
+  // 醫生
+  "內科醫師":"醫生","外科醫師":"醫生","心臟科醫師":"醫生","眼科醫師":"醫生","影像科醫師":"醫生","麻醉科醫師":"醫生","住院醫師":"醫生",
+
+  // 助理（含櫃檯/藥局）
+  "門診助理":"助理","住院部助理":"助理","外科助理":"助理","櫃檯人員":"助理","藥局人員":"助理",
+
+  // 行政
+  "行政助理":"行政","管理部":"行政","後勤人員":"行政",
+
+  // 其他
+  "其他：楊雨蓁沒有想到的（怪他）":"其他",
+  "其他":"其他"
+};
+
+
+
+/** 题目构面 */
 const dims = [
   { keyA: "B", keyB: "T", name: "社交能量（B / T）", param: "bt" },
   { keyA: "P", keyB: "V", name: "工作風格（P / V）", param: "pv" },
@@ -345,7 +286,7 @@ const questions = [
   { dimIndex: 3, text: "Q20｜臨時有同事請假需要支援時你：", aText: "會希望提前知道與安排", bText: "現場需要就直接上，有錢不賺，王八蛋", aKey:"O", bKey:"F" },
 ];
 
-/** 16型 */
+/** 16型文案 */
 const typeMap = {
   "BPCO": { title:"🐶【德國牧羊犬型】", trait:["紀律支柱型","重流程、講效率","團隊核心人物"], quote:"「交給我，我處理。」" },
   "BPCF": { title:"🐕【米格魯型】", trait:["活力執行者","熱心又務實","做事有效率"], quote:"「邊做邊調整！」" },
@@ -368,7 +309,21 @@ const typeMap = {
   "TVDF": { title:"🐶【大白熊型】", trait:["溫柔智者型","重視溫度","情感豐富"], quote:"「沒事，我陪你。」" },
 };
 
-/** ---------------- utils ---------------- */
+/** ============ sig 防改 ============ */
+function canonicalString(code, paramsObj) {
+  return `r=${code}&bt=${paramsObj.bt}&pv=${paramsObj.pv}&cd=${paramsObj.cd}&of=${paramsObj.of}&salt=${SIG_SALT}`;
+}
+async function sha256Hex(str) {
+  const enc = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+async function makeSig(code, pairs) {
+  const hex = await sha256Hex(canonicalString(code, pairs));
+  return hex.slice(0,16);
+}
+
+/** ============ 工具 ============ */
 function toast(text){
   const t=document.getElementById("toast");
   t.textContent=text;
@@ -399,12 +354,43 @@ function flipHint(aKey,aScore,bKey,bScore){
   return `目前 ${leader} 領先｜差 ${need} 題翻盤`;
 }
 function encodePair(a,b){ return `${a}-${b}`; }
+function decodePair(str){
+  if(!/^\d-\d$/.test(str)) return null;
+  const [a,b]=str.split("-").map(n=>parseInt(n,10));
+  if([a,b].some(n=>Number.isNaN(n)||n<0||n>5)) return null;
+  if(a+b!==5) return null;
+  if(a===b) return null;
+  return {a,b};
+}
 
-/** ---------------- render quiz ---------------- */
+/** ✅ 16 张图：优先 images/BPCO.jpg；如果你还没改名，也兼容 images:BPCO.jpg（暂存） */
+function setImageForCode(code){
+  const img = document.getElementById("typeImg");
+  const candidates = [
+    `images/${code}.jpg`,
+    `images/${code}.png`,
+    `images:${code}.jpg`, // 你现在的错误命名（兼容）
+    `${code}.jpg`,
+  ];
+
+  let i = 0;
+  const tryNext = () => {
+    if (i >= candidates.length) {
+      img.alt = `找不到圖片：images/${code}.jpg`;
+      img.removeAttribute("src");
+      return;
+    }
+    const src = candidates[i++];
+    img.onerror = tryNext;
+    img.src = src;
+  };
+  tryNext();
+}
+
+/** ============ UI 渲染 ============ */
 function renderQuiz(){
   const root=document.getElementById("quiz");
   root.innerHTML="";
-
   dims.forEach((d,dimIndex)=>{
     const sec=document.createElement("div");
     sec.className="section";
@@ -440,11 +426,9 @@ function renderQuiz(){
       });
   });
 }
-
 function getAnswers(){
   return questions.map((_,i)=>document.querySelector(`input[name="q${i}"]:checked`)?.value || null);
 }
-
 function computeFromAnswers(answers){
   const score={B:0,T:0,P:0,V:0,C:0,D:0,O:0,F:0};
   answers.forEach((ans,i)=>{
@@ -458,14 +442,20 @@ function computeFromAnswers(answers){
   dims.forEach(d=>pairs[d.param]=encodePair(score[d.keyA],score[d.keyB]));
   return {score,code,pairs};
 }
+async function setShareParamsWithSig({code,pairs}){
+  const sig=await makeSig(code,pairs);
+  const url=new URL(window.location.href);
+  url.searchParams.set("r",code);
+  dims.forEach(d=>url.searchParams.set(d.param,pairs[d.param]));
+  url.searchParams.set("sig",sig);
+  window.history.replaceState({}, "", url.toString());
+}
 
 function renderResult({score,code}){
   const info=typeMap[code] || {title:"未定義結果",trait:["請補上 typeMap"],quote:""};
   document.getElementById("code").textContent=code;
   document.getElementById("typeTitle").textContent=info.title;
-
-  // ✅ 关键：加载 16 张独立图片（并容错支持 images:xxx.jpg）
-  setTypeImage(code);
+  setImageForCode(code);
 
   const traitHTML=Array.isArray(info.trait)
     ? `<ul>${info.trait.map(t=>`<li>${t}</li>`).join("")}</ul>`
@@ -496,6 +486,7 @@ function renderResult({score,code}){
   });
 
   document.getElementById("result").style.display="block";
+  document.getElementById("analysisBox").style.display="block";
 }
 
 function buildResultCardText({score,code}){
@@ -518,187 +509,166 @@ function buildResultCardText({score,code}){
     traits ? `\n特質：\n${traits}` : "",
     info.quote ? `\n代表句：${info.quote}` : "",
     `\n構面分數：\n${dimLines}`,
-    `\n分享連結：${url}`
+    `\n分享連結（含真實分數+驗證）：${url}`
   ].filter(Boolean).join("\n");
 }
 
-/** ---------------- stats: JSONP (no CORS issue) ---------------- */
-function jsonp(url){
-  return new Promise((resolve,reject)=>{
-    const cb = "__cb_" + Math.random().toString(16).slice(2);
-    const u = new URL(url);
-    u.searchParams.set("callback", cb);
+/** ============ 统计：POST 用 no-cors；GET 用 JSONP 解决跨域 ============ */
+async function sendStatsRecord(payload){
+  try{
+    await fetch(STATS_ENDPOINT, {
+      method:"POST",
+      mode:"no-cors",
+      body: JSON.stringify(payload)
+    });
+    return { ok:true };
+  }catch(e){
+    return { ok:false, err:String(e) };
+  }
+}
+
+function loadStatsJSONP(timeoutMs=8000){
+  return new Promise((resolve)=>{
+    const cb = "__stats_cb_" + Math.random().toString(36).slice(2);
+    const timer = setTimeout(()=>{
+      cleanup();
+      resolve(null);
+    }, timeoutMs);
+
+    function cleanup(){
+      clearTimeout(timer);
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+    }
 
     window[cb] = (data)=>{
-      try{ resolve(data); }
-      finally{
-        delete window[cb];
-        script.remove();
-      }
+      cleanup();
+      resolve(data || null);
     };
+
+    const url = new URL(STATS_ENDPOINT);
+    url.searchParams.set("callback", cb);
+    url.searchParams.set("_", Date.now().toString());
 
     const script = document.createElement("script");
-    script.src = u.toString();
+    script.src = url.toString();
     script.onerror = ()=>{
-      delete window[cb];
-      script.remove();
-      reject(new Error("JSONP_LOAD_FAIL"));
+      cleanup();
+      resolve(null);
     };
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   });
 }
 
-async function sendStats(code, pairs, role){
-  if(!STATS_ENDPOINT || STATS_ENDPOINT.startsWith("PASTE_")) {
-    return { ok:false, error:"NO_ENDPOINT" };
-  }
-  const u = new URL(STATS_ENDPOINT);
-  u.searchParams.set("action","log");
-  u.searchParams.set("type", code);
-  u.searchParams.set("role", role);
-  u.searchParams.set("bt", pairs.bt);
-  u.searchParams.set("pv", pairs.pv);
-  u.searchParams.set("cd", pairs.cd);
-  u.searchParams.set("of", pairs.of);
-  u.searchParams.set("ua", navigator.userAgent.slice(0,180)); // 避免过长
+/** ============ 身份下拉初始化 ============ */
+function initRoleSelects(){
+  const roleSelect = document.getElementById("roleSelect");
+  const roleFilter = document.getElementById("roleFilter");
+  const opts = ["（請選擇）", ...ROLE_OPTIONS];
 
-  // 用 JSONP 打点（不会被 CORS 卡）
-  try{
-    const res = await jsonp(u.toString());
-    return res;
-  }catch(e){
-    return { ok:false, error:String(e) };
-  }
+  roleSelect.innerHTML = opts.map(v=>`<option value="${v==="（請選擇）"?"":v}">${v}</option>`).join("");
+  roleFilter.innerHTML = ["全部", ...ROLE_OPTIONS].map(v=>`<option value="${v==="全部"?"":v}">${v}</option>`).join("");
 }
 
-async function loadAllStats(){
-  if(!STATS_ENDPOINT || STATS_ENDPOINT.startsWith("PASTE_")) return null;
-  const u = new URL(STATS_ENDPOINT);
-  u.searchParams.set("action","stats");
-  try{
-    return await jsonp(u.toString());
-  }catch(e){
-    return null;
+/** ============ 分析渲染 ============ */
+function typeCountList(countMap){
+  const out = {};
+  for (const t of typeOrder) out[t] = (countMap && countMap[t]) ? countMap[t] : 0;
+  return out;
+}
+
+function renderRoleDistribution(data, role){
+  const card = document.getElementById("distCard");
+  const compare = document.getElementById("compareCard");
+  compare.style.display="none";
+
+  let map = {};
+  let sample = 0;
+
+  if (!role) {
+    map = typeCountList(data.totalsByType);
+    sample = Object.values(map).reduce((a,b)=>a+b,0);
+  } else {
+    const by = data.byRoleType && data.byRoleType[role] ? data.byRoleType[role] : {};
+    map = typeCountList(by);
+    sample = Object.values(map).reduce((a,b)=>a+b,0);
   }
-}
 
-function renderStatsBox(allStats, myCode){
-  const box = document.getElementById("statsBox");
-  box.style.display = "block";
+  document.getElementById("sampleHint").textContent = `樣本：${sample}`;
 
-  const totalCounts = allStats?.totalCounts || {};
-  const entries = Object.entries(totalCounts).sort((a,b)=>b[1]-a[1]);
-  const total = entries.reduce((s,[,v])=>s+v,0);
-  const mine = totalCounts[myCode] || 0;
+  const rows = typeOrder.map(t=>{
+    const v = map[t] || 0;
+    const pct = sample ? Math.round((v/sample)*100) : 0;
+    return { t, v, pct };
+  }).sort((a,b)=>b.v-a.v);
 
-  document.getElementById("statsHint").textContent =
-    allStats?.updatedAt ? `更新時間：${allStats.updatedAt}` : "（刷新頁面可更新）";
-  document.getElementById("statsTotal").textContent = String(total);
-  document.getElementById("statsMine").textContent = `${myCode}：${mine}`;
+  const top = rows[0] ? `${rows[0].t}（${rows[0].v}）` : "-";
 
-  const rankBox=document.getElementById("statsRank");
-  rankBox.innerHTML=`<div style="font-weight:900;margin-bottom:6px;">排行榜（前 8）</div>`;
-  const top=entries.slice(0,8);
-  if(!top.length){ rankBox.innerHTML+=`<div class="small">尚無資料</div>`; return; }
-  top.forEach(([k,v],i)=>{
-    const row=document.createElement("div");
-    row.className="rank-item";
-    row.innerHTML=`<div>${i+1}. <span class="mono">${k}</span></div><div><b>${v}</b></div>`;
-    rankBox.appendChild(row);
-  });
-}
-
-/** 画某身份分布 */
-function renderRoleDistribution(allStats, role){
-  const out = document.getElementById("analyzeOut");
-  out.innerHTML = "";
-
-  const roleCounts = allStats?.roleCounts || {};
-  const counts = roleCounts[role] || {};
-  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const total = entries.reduce((s,[,v])=>s+v,0);
-
-  const title = document.createElement("div");
-  title.className = "dist-item";
-  title.innerHTML = `
-    <div class="dist-line">
-      <div>身份：<b>${role}</b></div>
-      <div>樣本數：<b>${total}</b></div>
+  card.style.display="block";
+  card.innerHTML = `
+    <div class="kpi">身份：${role || "全部"}｜Top 人格：${top}</div>
+    <div class="small" style="margin-top:6px;">點擊「更新統計」可刷新資料。</div>
+    <div style="margin-top:10px;">
+      ${rows.map(r=>`
+        <div class="item">
+          <div><b>${r.t}</b> <span class="small">(${r.pct}%)</span></div>
+          <div><b>${r.v}</b></div>
+        </div>
+        <div class="meter"><div style="width:${r.pct}%"></div></div>
+      `).join("")}
     </div>
-    <div class="small">Top 人格：<b>${entries[0]?.[0] || "-"}</b></div>
   `;
-  out.appendChild(title);
-
-  if(total === 0){
-    const empty = document.createElement("div");
-    empty.className="dist-item";
-    empty.innerHTML=`<div class="small">此身份目前沒有資料。</div>`;
-    out.appendChild(empty);
-    return;
-  }
-
-  // 16型全补齐
-  const allTypes = Object.keys(typeMap);
-  const normalized = allTypes.map(t => [t, counts[t] || 0]).sort((a,b)=>b[1]-a[1]);
-
-  normalized.forEach(([t,v])=>{
-    const pct = Math.round((v/total)*100);
-    const item = document.createElement("div");
-    item.className = "dist-item";
-    item.innerHTML = `
-      <div class="dist-line"><div><span class="mono">${t}</span></div><div>${v}（${pct}%）</div></div>
-      <div class="dist-bar"><div style="width:${pct}%;"></div></div>
-    `;
-    out.appendChild(item);
-  });
 }
 
-/** 医生 vs 助理分布对比（由 Apps Script 分组） */
-function renderCompare(allStats){
-  const out = document.getElementById("analyzeOut");
-  out.innerHTML = "";
+function renderCompareDoctorAssistantAdmin(data){
+  const card = document.getElementById("compareCard");
+  const dist = document.getElementById("distCard");
+  dist.style.display="none";
 
-  const groupCounts = allStats?.groupCounts || {};
-  const doctor = groupCounts.doctor || {};
-  const assistant = groupCounts.assistant || {};
+  const g = data.byGroupType || {};
+  const doctor = typeCountList(g["醫生"]);
+  const assistant = typeCountList(g["助理"]);
+  const admin = typeCountList(g["行政"]);
+  const other = typeCountList(g["其他"]);
 
-  const sum = (obj)=>Object.values(obj).reduce((s,v)=>s+v,0);
-  const dTotal = sum(doctor);
-  const aTotal = sum(assistant);
+  const nDoc = Object.values(doctor).reduce((a,b)=>a+b,0);
+  const nAs  = Object.values(assistant).reduce((a,b)=>a+b,0);
+  const nAd  = Object.values(admin).reduce((a,b)=>a+b,0);
+  const nOt  = Object.values(other).reduce((a,b)=>a+b,0);
 
-  const head = document.createElement("div");
-  head.className="dist-item";
-  head.innerHTML=`
-    <div class="dist-line">
-      <div><b>医生 vs 助理</b></div>
-      <div>医生樣本：<b>${dTotal}</b>｜助理樣本：<b>${aTotal}</b></div>
+  document.getElementById("sampleHint").textContent =
+    `醫生 ${nDoc}｜助理 ${nAs}｜行政 ${nAd}｜其他 ${nOt}`;
+
+  const rows = typeOrder.map(t=>{
+    const d = doctor[t] || 0;
+    const a = assistant[t] || 0;
+    const m = admin[t] || 0;
+    const o = other[t] || 0;
+
+    const denom = d + a + m + o;
+    const docPct = denom ? Math.round((d/denom)*100) : 0;
+    return { t, d, a, m, o, docPct, denom };
+  }).sort((x,y)=>y.denom-x.denom);
+
+  card.style.display="block";
+  card.innerHTML = `
+    <div class="kpi">醫生 vs 助理 vs 行政 vs 其他（每型：四者人數 + 醫生占比條）</div>
+    <div class="small" style="margin-top:6px;">條形為「醫生占比」，越高代表該人格更偏醫生群。</div>
+    <div style="margin-top:10px;">
+      ${rows.map(r=>`
+        <div class="item">
+          <div><b>${r.t}</b></div>
+          <div class="small">醫生 ${r.d} / 助理 ${r.a} / 行政 ${r.m} / 其他 ${r.o}</div>
+        </div>
+        <div class="meter"><div style="width:${r.docPct}%"></div></div>
+        <div class="small" style="margin-top:4px;">醫生占比：${r.docPct}%（在四組樣本中）</div>
+      `).join("")}
     </div>
-    <div class="small">条形为「医生占比」，越高代表该人格更偏医生群。</div>
   `;
-  out.appendChild(head);
-
-  const allTypes = Object.keys(typeMap).sort();
-  allTypes.forEach(t=>{
-    const dv = doctor[t] || 0;
-    const av = assistant[t] || 0;
-    const denom = dv + av;
-    const doctorPct = denom ? Math.round((dv/denom)*100) : 0;
-
-    const item = document.createElement("div");
-    item.className="dist-item";
-    item.innerHTML=`
-      <div class="dist-line">
-        <div><span class="mono">${t}</span></div>
-        <div>醫生 ${dv} / 助理 ${av}</div>
-      </div>
-      <div class="dist-bar"><div style="width:${doctorPct}%;"></div></div>
-      <div class="small">醫生占比：${doctorPct}%（在醫生+助理樣本中）</div>
-    `;
-    out.appendChild(item);
-  });
 }
 
-/** ---------------- main flow ---------------- */
+
+/** ============ 主流程 ============ */
 async function calcFromUI(){
   hideMsg();
   const answers=getAnswers();
@@ -709,139 +679,155 @@ async function calcFromUI(){
   }
 
   const computed=computeFromAnswers(answers);
-  if(!typeMap[computed.code]){
-    showMsg("計算結果異常：找不到對應的 16 型。");
-    return;
-  }
-
+  await setShareParamsWithSig({code:computed.code,pairs:computed.pairs});
   renderResult({score:computed.score,code:computed.code});
   document.getElementById("result").scrollIntoView({behavior:"smooth"});
-
-  // 自动拉一次统计（可不送出身份）
-  const all = await loadAllStats();
-  if(all && all.ok){
-    renderStatsBox(all, computed.code);
-  }else{
-    document.getElementById("statsBox").style.display="block";
-    document.getElementById("statsHint").textContent="（統計讀取失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取）";
-    document.getElementById("statsTotal").textContent="-";
-    document.getElementById("statsMine").textContent=`${computed.code}：-`;
-    document.getElementById("statsRank").innerHTML=`<div class="small">暫時無法讀取排行榜</div>`;
-  }
 }
 
 function resetAll(){
   document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);
   document.getElementById("result").style.display="none";
   hideMsg();
-  document.getElementById("statsBox").style.display="none";
+
+  const url=new URL(window.location.href);
+  ["r","sig",...dims.map(d=>d.param)].forEach(k=>url.searchParams.delete(k));
+  window.history.replaceState({}, "", url.toString());
+
+  document.getElementById("mainActions").style.display="";
+  document.getElementById("analysisBox").style.display="none";
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/** ---------------- init ---------------- */
-function initRoleSelects(){
-  const sel1 = document.getElementById("roleSelect");
-  const sel2 = document.getElementById("roleAnalyze");
+/** ============ 分享链接读取 ============ */
+async function showResultFromParamsIfAny(){
+  const url=new URL(window.location.href);
+  const r=(url.searchParams.get("r")||"").toUpperCase().trim();
+  if(!r) return;
 
-  const build = (sel)=>{
-    sel.innerHTML = "";
-    const opt0 = document.createElement("option");
-    opt0.value = "";
-    opt0.textContent = "請選擇身份";
-    sel.appendChild(opt0);
+  const codeOk=/^[BT][PV][CD][OF]$/.test(r) && typeMap[r];
+  if(!codeOk) return;
 
-    ROLE_OPTIONS.forEach(r=>{
-      const o=document.createElement("option");
-      o.value=r; o.textContent=r;
-      sel.appendChild(o);
-    });
-  };
-  build(sel1);
-  build(sel2);
+  const sig=(url.searchParams.get("sig")||"").trim();
+  if(!sig){ showMsg("此分享連結缺少驗證碼（sig）。"); return; }
+
+  const pairs={};
+  const score={B:0,T:0,P:0,V:0,C:0,D:0,O:0,F:0};
+
+  for(const d of dims){
+    const raw=(url.searchParams.get(d.param)||"").trim();
+    const pair=decodePair(raw);
+    if(!pair){ showMsg("分享連結分數參數不合法（需為 5 題制，例如 4-1）。"); return; }
+    pairs[d.param]=raw;
+    score[d.keyA]=pair.a;
+    score[d.keyB]=pair.b;
+
+    const winner=(pair.a>pair.b)?d.keyA:d.keyB;
+    const expected=r[dims.indexOf(d)];
+    if(winner!==expected){ showMsg("分享連結的 r 與分數勝負不一致。"); return; }
+  }
+
+  const expectedSig=await makeSig(r,pairs);
+  if(expectedSig!==sig){ showMsg("分享連結已被修改（sig 驗證失敗）。"); return; }
+
+  document.getElementById("topHint").innerHTML=
+    `你正在查看分享結果：<span class="mono">${r}</span>（已通過驗證）`;
+  document.getElementById("mainActions").style.display="none";
+
+  renderResult({score,code:r});
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
 }
 
+/** ============ 事件：送统计 + 更新统计 + 分析 ============ */
+function getCurrentCodeFromURL(){
+  const url=new URL(window.location.href);
+  const r=(url.searchParams.get("r")||"").toUpperCase().trim();
+  const sig=(url.searchParams.get("sig")||"").trim();
+  if(!r || !sig || !typeMap[r]) return null;
+  return r;
+}
+
+async function refreshAnalysis(){
+  const data = await loadStatsJSONP();
+  if(!data || !data.ok){
+    showMsg("統計讀取失敗：請確認 Apps Script 已重新部署新版，且 /exec 可正常回 JSONP。");
+    return null;
+  }
+  return data;
+}
+
+/** init */
 renderQuiz();
 initRoleSelects();
+showResultFromParamsIfAny();
 
 document.getElementById("btnCalc").addEventListener("click", calcFromUI);
 document.getElementById("btnReset").addEventListener("click", resetAll);
 
 document.getElementById("btnCopyLink").addEventListener("click", ()=>{
   hideMsg();
+  const url=new URL(window.location.href);
+  const hasR=url.searchParams.get("r");
+  const hasSig=url.searchParams.get("sig");
+  if(!hasR || !hasSig){ showMsg("請先完成 20 題並按「計算結果」。"); return; }
   copyText(window.location.href);
 });
 
-document.getElementById("btnCopyCard").addEventListener("click", ()=>{
+document.getElementById("btnCopyCard").addEventListener("click", async ()=>{
   hideMsg();
   const answers=getAnswers();
   if(answers.some(v=>!v)){ showMsg("要複製結果卡前，請先完成 20 題並計算結果。"); return; }
   const computed=computeFromAnswers(answers);
+  await setShareParamsWithSig({code:computed.code,pairs:computed.pairs});
+  renderResult({score:computed.score,code:computed.code});
   copyText(buildResultCardText({score:computed.score,code:computed.code}));
 });
 
-document.getElementById("btnSendStats").addEventListener("click", async ()=>{
+document.getElementById("btnSendRole").addEventListener("click", async ()=>{
   hideMsg();
-  const answers=getAnswers();
-  if(answers.some(v=>!v)){ showMsg("請先完成 20 題並計算結果。"); return; }
+  const code = getCurrentCodeFromURL();
+  if(!code){ showMsg("請先「計算結果」產生網址參數後再送出統計。"); return; }
 
-  const role = document.getElementById("roleSelect").value;
-  if(!role){ showMsg("請先選擇身份。"); return; }
+  const role = (document.getElementById("roleSelect").value || "").trim();
+  if(!role){ showMsg("請先選擇身份/職務。"); return; }
 
-  const computed = computeFromAnswers(answers);
+  const url=new URL(window.location.href);
+  const payload = {
+    type: code,
+    r: code,
+    bt: url.searchParams.get("bt") || "",
+    pv: url.searchParams.get("pv") || "",
+    cd: url.searchParams.get("cd") || "",
+    of: url.searchParams.get("of") || "",
+    role,
+    group: ROLE_GROUP[role] || "其他",
+    ua: navigator.userAgent
+  };
 
-  const res = await sendStats(computed.code, computed.pairs, role);
-  if(!res || !res.ok){
-    showMsg("統計送出失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取。");
-    return;
-  }
+  await sendStatsRecord(payload);
   toast("已送出統計 ✅");
-
-  const all = await loadAllStats();
-  if(all && all.ok){
-    renderStatsBox(all, computed.code);
-  }
 });
 
-document.getElementById("btnRefreshStats").addEventListener("click", async ()=>{
+document.getElementById("btnRefresh").addEventListener("click", async ()=>{
   hideMsg();
-  const answers=getAnswers();
-  const computed = answers.some(v=>!v) ? null : computeFromAnswers(answers);
-  const myCode = computed?.code || (document.getElementById("code").textContent || "");
-
-  const all = await loadAllStats();
-  if(all && all.ok){
-    renderStatsBox(all, myCode);
-    toast("已更新 ✅");
-  }else{
-    showMsg("統計讀取失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取。");
-  }
+  const data = await refreshAnalysis();
+  if(!data) return;
+  toast("統計已更新 ✅");
 });
 
-document.getElementById("btnAnalyzeRole").addEventListener("click", async ()=>{
+document.getElementById("btnRoleDist").addEventListener("click", async ()=>{
   hideMsg();
-  const role = document.getElementById("roleAnalyze").value;
-  if(!role){ showMsg("請先選擇要分析的身份。"); return; }
-
-  const all = await loadAllStats();
-  if(all && all.ok){
-    renderRoleDistribution(all, role);
-  }else{
-    showMsg("統計讀取失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取。");
-  }
+  const data = await refreshAnalysis();
+  if(!data) return;
+  const role = (document.getElementById("roleFilter").value || "").trim(); // "" 代表全部
+  renderRoleDistribution(data, role);
 });
 
 document.getElementById("btnCompare").addEventListener("click", async ()=>{
   hideMsg();
-  const all = await loadAllStats();
-  if(all && all.ok){
-    renderCompare(all);
-  }else{
-    showMsg("統計讀取失敗：請確認 Apps Script 已部署為 Web App 並允許匿名存取。");
-  }
+  const data = await refreshAnalysis();
+  if(!data) return;
+  renderCompareDoctorAssistantAdmin(data);
 });
 </script>
 </body>
 </html>
-
-
-
