@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>獸醫 16 型人格測驗</title>
+  <title>16 型獸醫院工作者人格測驗</title>
 
   <style>
     :root{
@@ -79,7 +79,7 @@
 <div class="wrap">
   <div class="topbar">
     <div>
-      <h1>獸醫 16 型人格測驗</h1>
+      <h1>16 型獸醫院工作者人格測驗</h1>
       <div class="tag">20 題｜4 構面｜二選一｜可分享含真實分數</div>
     </div>
   </div>
@@ -471,7 +471,7 @@ function buildResultCardText({score,code}){
   // 你若想要完全一致的輸出格式，我也可以再幫你對齊
   const traits=Array.isArray(info.trait) && info.trait.length ? info.trait.map(t=>`- ${t}`).join("\n") : "";
   return [
-    `【獸醫 16 型人格測驗結果】`,
+    `【16 型獸醫院工作者人格測驗結果】`,
     `四字母：${code}`,
     `${info.title}`,
     traits ? `\n特質：\n${traits}` : "",
