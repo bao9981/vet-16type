@@ -84,7 +84,6 @@
       display:flex;gap:16px;align-items:flex-start;justify-content:flex-start;flex-wrap:wrap;
     }
 
-    /* ✅ 16 张图片：用 <img>，避免 sprite 截到下一张 */
     .type-img{
       width:var(--spriteW);
       height:calc(var(--spriteW) * var(--spriteAR));
@@ -112,7 +111,6 @@
 
     .chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;background:#fff;color:#444;}
 
-    /* 分析区 */
     .analysis{
       margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#fafafa;display:none;
     }
@@ -137,6 +135,7 @@
       pointer-events:none;transition:opacity .2s;
     }
     .toast.show{opacity:1;}
+    code.badge{background:#f1f1f5;border:1px solid #e7e7ee;padding:2px 6px;border-radius:8px;}
   </style>
 </head>
 
@@ -187,7 +186,8 @@
           <button id="btnRefresh">更新統計</button>
         </div>
         <div class="small" style="margin-top:6px;">
-          先算結果 → 選身份 → 送出統計。統計為全體彙總。
+          先算結果 → 選身份 → 送出統計。統計為全體彙總。<br/>
+          ✅ GitHub Pages 建議使用 <code class="badge">GET ?collect=1</code> 寫入，避免 CORS。
         </div>
       </div>
     </div>
@@ -214,9 +214,14 @@
 <div id="toast" class="toast">已複製</div>
 
 <script>
-/** ✅ 你的 Web App /exec */
-const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwO6crOO2yOyopzpK6tVRsnPs6L0s0S5Ns4Qsm1IWXQYBNEWeIN4-Dl2V7AY20J3d-8hQ/exec";
-const SIG_SALT = "vet-16type-v3::please-change-this-to-random";
+/**
+ * ✅ 重要：请放「/exec」这条，不要带 ?callback，不要 encode 成 %3F
+ * 例：https://script.google.com/macros/s/xxxx/exec
+ */
+const STATS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzePmt1K1lhGKttJFLS9YpBOqbn5qAHB7J0c-I5N57ZoSSpm5yFGA2PJmnqxCSadYkkOQ/exec";
+
+/** ⚠️ 请改成随机字符串（用于 sig） */
+const SIG_SALT = "vet-16type-v4::please-change-this-to-random";
 
 /** 16 型顺序 */
 const typeOrder = [
@@ -230,27 +235,16 @@ const typeOrder = [
 const ROLE_OPTIONS = [
   "內科醫師","外科醫師","心臟科醫師","眼科醫師","影像科醫師","麻醉科醫師","住院醫師",
   "門診助理","住院部助理","外科助理","行政助理","櫃檯人員","藥局人員","管理部","後勤人員",
-  "其他：楊雨蓁沒有想到的（怪他）",
   "其他"
 ];
 
-/** 分组（用于 医生 vs 助理 vs 行政 三组对比） */
+/** 分组（四组对比：醫生 / 助理 / 行政 / 其他） */
 const ROLE_GROUP = {
-  // 醫生
   "內科醫師":"醫生","外科醫師":"醫生","心臟科醫師":"醫生","眼科醫師":"醫生","影像科醫師":"醫生","麻醉科醫師":"醫生","住院醫師":"醫生",
-
-  // 助理（含櫃檯/藥局）
   "門診助理":"助理","住院部助理":"助理","外科助理":"助理","櫃檯人員":"助理","藥局人員":"助理",
-
-  // 行政
   "行政助理":"行政","管理部":"行政","後勤人員":"行政",
-
-  // 其他
-  "其他：楊雨蓁沒有想到的（怪他）":"其他",
   "其他":"其他"
 };
-
-
 
 /** 题目构面 */
 const dims = [
@@ -363,16 +357,20 @@ function decodePair(str){
   return {a,b};
 }
 
-/** ✅ 16 张图：优先 images/BPCO.jpg；如果你还没改名，也兼容 images:BPCO.jpg（暂存） */
+/** ✅ 图片路径：支持两种
+ * 1) 正确：images/BPCO.jpg（你把图都放进 images/ 文件夹）
+ * 2) 兼容：images:BPCO.jpg（你现在 GitHub 里“怪格式”文件名）
+ */
 function setImageForCode(code){
   const img = document.getElementById("typeImg");
   const candidates = [
     `images/${code}.jpg`,
     `images/${code}.png`,
-    `images:${code}.jpg`, // 你现在的错误命名（兼容）
+    `images:${code}.jpg`,
+    `images:${code}.png`,
     `${code}.jpg`,
+    `${code}.png`,
   ];
-
   let i = 0;
   const tryNext = () => {
     if (i >= candidates.length) {
@@ -513,36 +511,36 @@ function buildResultCardText({score,code}){
   ].filter(Boolean).join("\n");
 }
 
-/** ============ 统计：POST 用 no-cors；GET 用 JSONP 解决跨域 ============ */
-function sendStatsRecord(payload){
+/** ============ 统计：写入用 GET collect=1（彻底避开 CORS） ============ */
+function buildCollectURL(payload){
+  const url = new URL(STATS_ENDPOINT);
+  url.searchParams.set("collect","1");
+  // 只写必要字段
+  url.searchParams.set("type", payload.type || "");
+  url.searchParams.set("r", payload.r || "");
+  url.searchParams.set("bt", payload.bt || "");
+  url.searchParams.set("pv", payload.pv || "");
+  url.searchParams.set("cd", payload.cd || "");
+  url.searchParams.set("of", payload.of || "");
+  url.searchParams.set("role", payload.role || "");
+  url.searchParams.set("group", payload.group || "");
+  url.searchParams.set("ua", payload.ua || "");
+  // cache-bust
+  url.searchParams.set("_", Date.now().toString());
+  return url.toString();
+}
+
+/** 用 Image beacon 送出（跨域最稳） */
+function sendStatsCollect(payload){
   return new Promise((resolve)=>{
-    try{
-      const url = new URL(STATS_ENDPOINT);
-      url.searchParams.set("collect","1");
-
-      // 只传你 Apps Script 需要的字段
-      url.searchParams.set("type", payload.type || payload.r || "");
-      url.searchParams.set("r", payload.r || payload.type || "");
-      url.searchParams.set("bt", payload.bt || "");
-      url.searchParams.set("pv", payload.pv || "");
-      url.searchParams.set("cd", payload.cd || "");
-      url.searchParams.set("of", payload.of || "");
-      url.searchParams.set("role", payload.role || "");
-      url.searchParams.set("ua", payload.ua || navigator.userAgent);
-
-      // cache bust
-      url.searchParams.set("_", Date.now().toString());
-
-      const img = new Image();
-      img.onload = () => resolve({ ok:true });
-      img.onerror = () => resolve({ ok:false, err:"IMG_BEACON_FAILED" });
-      img.src = url.toString();
-    }catch(e){
-      resolve({ ok:false, err:String(e) });
-    }
+    const img = new Image();
+    img.onload = ()=>resolve({ok:true});
+    img.onerror = ()=>resolve({ok:false});
+    img.src = buildCollectURL(payload);
   });
 }
 
+/** 统计读取：JSONP */
 function loadStatsJSONP(timeoutMs=8000){
   return new Promise((resolve)=>{
     const cb = "__stats_cb_" + Math.random().toString(36).slice(2);
@@ -551,6 +549,7 @@ function loadStatsJSONP(timeoutMs=8000){
       resolve(null);
     }, timeoutMs);
 
+    let script = null;
     function cleanup(){
       clearTimeout(timer);
       try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
@@ -563,10 +562,11 @@ function loadStatsJSONP(timeoutMs=8000){
     };
 
     const url = new URL(STATS_ENDPOINT);
+    // ⚠️ 这里用 searchParams 组装，绝不会出现 %3F
     url.searchParams.set("callback", cb);
     url.searchParams.set("_", Date.now().toString());
 
-    const script = document.createElement("script");
+    script = document.createElement("script");
     script.src = url.toString();
     script.onerror = ()=>{
       cleanup();
@@ -636,7 +636,7 @@ function renderRoleDistribution(data, role){
   `;
 }
 
-function renderCompareDoctorAssistantAdmin(data){
+function renderCompareDoctorAssistantAdminOther(data){
   const card = document.getElementById("compareCard");
   const dist = document.getElementById("distCard");
   dist.style.display="none";
@@ -648,19 +648,16 @@ function renderCompareDoctorAssistantAdmin(data){
   const other = typeCountList(g["其他"]);
 
   const nDoc = Object.values(doctor).reduce((a,b)=>a+b,0);
-  const nAs  = Object.values(assistant).reduce((a,b)=>a+b,0);
-  const nAd  = Object.values(admin).reduce((a,b)=>a+b,0);
-  const nOt  = Object.values(other).reduce((a,b)=>a+b,0);
-
-  document.getElementById("sampleHint").textContent =
-    `醫生 ${nDoc}｜助理 ${nAs}｜行政 ${nAd}｜其他 ${nOt}`;
+  const nAs = Object.values(assistant).reduce((a,b)=>a+b,0);
+  const nAd = Object.values(admin).reduce((a,b)=>a+b,0);
+  const nOt = Object.values(other).reduce((a,b)=>a+b,0);
+  document.getElementById("sampleHint").textContent = `醫生 ${nDoc}｜助理 ${nAs}｜行政 ${nAd}｜其他 ${nOt}`;
 
   const rows = typeOrder.map(t=>{
     const d = doctor[t] || 0;
     const a = assistant[t] || 0;
     const m = admin[t] || 0;
     const o = other[t] || 0;
-
     const denom = d + a + m + o;
     const docPct = denom ? Math.round((d/denom)*100) : 0;
     return { t, d, a, m, o, docPct, denom };
@@ -682,7 +679,6 @@ function renderCompareDoctorAssistantAdmin(data){
     </div>
   `;
 }
-
 
 /** ============ 主流程 ============ */
 async function calcFromUI(){
@@ -765,7 +761,7 @@ function getCurrentCodeFromURL(){
 async function refreshAnalysis(){
   const data = await loadStatsJSONP();
   if(!data || !data.ok){
-    showMsg("統計讀取失敗：請確認 Apps Script 已重新部署新版，且 /exec 可正常回 JSONP。");
+    showMsg("統計讀取失敗：請確認 Apps Script 已重新部署最新版，且 /exec?callback=xxx 可正常回 JSONP。");
     return null;
   }
   return data;
@@ -819,8 +815,9 @@ document.getElementById("btnSendRole").addEventListener("click", async ()=>{
     ua: navigator.userAgent
   };
 
-  await sendStatsRecord(payload);
-  toast("已送出統計 ✅");
+  const res = await sendStatsCollect(payload);
+  if (res.ok) toast("已送出統計 ✅");
+  else showMsg("統計送出失敗：請確認 Apps Script /exec 可存取，且部署允許「任何人」。");
 });
 
 document.getElementById("btnRefresh").addEventListener("click", async ()=>{
@@ -842,7 +839,7 @@ document.getElementById("btnCompare").addEventListener("click", async ()=>{
   hideMsg();
   const data = await refreshAnalysis();
   if(!data) return;
-  renderCompareDoctorAssistantAdmin(data);
+  renderCompareDoctorAssistantAdminOther(data);
 });
 </script>
 </body>
